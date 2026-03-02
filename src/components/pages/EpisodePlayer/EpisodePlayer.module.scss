@@ -44,11 +44,9 @@
 // Header del episodio
 .episodeHeader {
   padding: 2rem;
-  background: linear-gradient(
-    135deg,
-    var(--bg-secondary) 0%,
-    var(--bg-tertiary) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--bg-secondary) 0%,
+      var(--bg-tertiary) 100%);
   border-bottom: 1px solid var(--border-color);
 
   @media (max-width: 768px) {
@@ -188,12 +186,9 @@
 
 // Navegación
 .navigation {
-  @include neu.neu-card();
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 1rem;
-  padding: 1.5rem;
-  border-radius: 20px;
   align-items: stretch;
 
   @media (max-width: 768px) {

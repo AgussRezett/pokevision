@@ -209,16 +209,6 @@ export default function SeasonDetail() {
 
       {/* Filtros */}
       <div className={styles.filtersCard}>
-        <button
-          className={`${styles.filterIconContainer} ${areFiltersActive && styles.filtersActive}`}
-          onClick={clearAllFilters}
-        >
-          <span className={styles.filterIcon}>🔍</span>
-          {areFiltersActive && (
-            <span className={styles.clearFiltersBubble}>✕</span>
-          )}
-        </button>
-
         <div className={styles.filtersContainer}>
           <div className={styles.filterGroup}>
             <label className={styles.filterLabel}>
@@ -255,9 +245,7 @@ export default function SeasonDetail() {
             <label className={styles.filterLabel}>
               Tipo de episodio
               {filterType.length > 0 && (
-                <span className={styles.filterCount}>
-                  ({filterType.length})
-                </span>
+                <span className={styles.filterCount}>{filterType.length}</span>
               )}
             </label>
             <div className={styles.filterButtons}>
