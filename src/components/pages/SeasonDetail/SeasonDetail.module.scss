@@ -328,6 +328,11 @@
   }
 }
 
+.episodeCard.watched .episodeNumber {
+  background: #7a7a7a !important;
+  outline: 0;
+}
+
 .episodeNumber {
   min-width: 50px;
   min-height: 50px;
@@ -341,7 +346,7 @@
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
-  outline: 2px solid var(--bg-glass);
+  outline: 2px solid var(--color-primary);
   @include neu.neu-card(9px, 22px);
 
   @media (max-width: 768px) {
@@ -452,9 +457,11 @@
   white-space: nowrap;
 
   @include neu.neu-card();
-  background: linear-gradient(360deg,
-      var(--color-primary),
-      var(--color-secondary));
+  background: linear-gradient(
+    360deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   color: #2c3e50;
   transition: all 500ms ease;
 

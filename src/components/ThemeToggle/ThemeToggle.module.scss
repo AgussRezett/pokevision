@@ -8,6 +8,7 @@
   color: var(--text-primary);
   cursor: pointer;
   border-radius: 50%;
+  aspect-ratio: 1;
 
   @include neu.neu-button();
 
