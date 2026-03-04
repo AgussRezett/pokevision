@@ -1,7 +1,7 @@
 @use '../../../styles/abstracts/neumorphism' as neu;
 
 .container {
-  padding: 0;
+  padding: 2rem 0;
 }
 
 .seasonsGrid {
@@ -17,7 +17,6 @@
 
 .seasonCard {
   @include neu.neu-card(20px, 20px);
-  outline: 2px solid var(--bg-glass);
   text-decoration: none;
   color: var(--text-primary);
   overflow: hidden;
@@ -36,15 +35,13 @@
       transform: scale(1.15) translateY(-5px);
     }
 
-    .seasonHeader {
-      &::before {
-        opacity: 1;
-      }
+    .locked .pokemonSticker {
+      transform: scale(1.08) translateY(-3px);
     }
-  }
 
-  &:active {
-    transform: translateY(-4px);
+    .seasonHeader::before {
+      opacity: 1;
+    }
   }
 }
 
@@ -55,7 +52,6 @@
   position: relative;
   overflow: hidden;
 
-  // Efecto de brillo animado
   &::before {
     content: '';
     position: absolute;
@@ -109,22 +105,33 @@
 
 .stickerWrapper {
   flex: 0 0 auto;
+  position: relative;
   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
   animation-delay: var(--sticker-delay);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
     transform: translateY(-10px) rotate(0deg) !important;
     z-index: 10;
-  }
-
-  &:hover > .pokemonSticker {
-    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
   }
 
   &:nth-child(2) {
     transform: translateY(-10px) scale(1.1);
     z-index: 2;
+  }
+
+  // Pokémon bloqueado (silueta)
+  &.locked {
+    .pokemonSticker {
+      filter: brightness(0) opacity(0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    &:hover .pokemonSticker {
+      filter: brightness(0) opacity(0.5);
+    }
   }
 }
 
@@ -134,11 +141,48 @@
   object-fit: contain;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform: rotate(var(--sticker-rotation));
-  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.2));
 
   @media (max-width: 768px) {
     width: 75px;
     height: 75px;
+  }
+}
+
+.lockIcon {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: lockBounce 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes lockBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
   }
 }
 
@@ -163,7 +207,7 @@
   }
 }
 
-// Progress
+// Progress Section
 .progressSection {
   margin-bottom: 1.5rem;
 }
@@ -189,8 +233,13 @@
   font-weight: 700;
 }
 
+.progressBarWrapper {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
 .progressBar {
-  @include neu.neu-inset(10px, 1px);
+  @include neu.neu-inset(10px, 3px);
   height: 10px;
   overflow: hidden;
   position: relative;
@@ -204,7 +253,6 @@
   position: relative;
   overflow: hidden;
 
-  // Efecto de brillo en la barra
   &::after {
     content: '';
     position: absolute;
@@ -219,6 +267,77 @@
       transparent
     );
     animation: shimmer 2s infinite;
+  }
+}
+
+// Marcadores de Pokémon en la barra
+.pokemonMarker {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 5;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateX(-50%) scale(1.2);
+    z-index: 10;
+
+    .markerLine {
+      height: 30px;
+      background: var(--season-color);
+    }
+
+    .markerIcon {
+      transform: scale(1.2);
+    }
+  }
+}
+
+.markerLine {
+  width: 2px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0 auto;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.markerIcon {
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  margin-top: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.pokemonMarker.unlocked {
+  .markerLine {
+    background: linear-gradient(to bottom, gold, orange);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  }
+
+  .markerIcon {
+    background: linear-gradient(135deg, gold, orange);
+    border-color: gold;
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  }
+
+  50% {
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.9);
   }
 }
 

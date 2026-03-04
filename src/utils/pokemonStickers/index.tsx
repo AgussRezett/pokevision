@@ -11,6 +11,7 @@ import TotodileSticker from '../../assets/pokemonSticker/s3_totodile.png';
 import BayleefSticker from '../../assets/pokemonSticker/s4_bayleef.png';
 import HeracrossSticker from '../../assets/pokemonSticker/s4_heracross.png';
 import NoctowlSticker from '../../assets/pokemonSticker/s4_noctowl.png';
+import WobbuffetSticker from '../../assets/pokemonSticker/s4_wobbuffet.png';
 import PhanpySticker from '../../assets/pokemonSticker/s5_phanpy.png';
 import LarvitarSticker from '../../assets/pokemonSticker/s5_larvitar.png';
 import PikachuSticker from '../../assets/pokemonSticker/s5_pikachu.png';
@@ -24,6 +25,7 @@ import SwellowSticker from '../../assets/pokemonSticker/s7_swellow.png';
 import TorkoalSticker from '../../assets/pokemonSticker/s7_torkoal.png';
 import CorphishSticker from '../../assets/pokemonSticker/s8_corphish.png';
 import CombuskenSticker from '../../assets/pokemonSticker/s8_combusken.png';
+import SnoruntSticker from '../../assets/pokemonSticker/s8_snorunt.png';
 import GlalieSticker from '../../assets/pokemonSticker/s8_glalie.png';
 import SceptileSticker from '../../assets/pokemonSticker/s9_sceptile.png';
 import CharizardS9Sticker from '../../assets/pokemonSticker/s9_charizard.png';
@@ -108,6 +110,7 @@ export {
   BayleefSticker,
   HeracrossSticker,
   NoctowlSticker,
+  WobbuffetSticker,
   PhanpySticker,
   LarvitarSticker,
   PikachuSticker,
@@ -119,6 +122,7 @@ export {
   TorkoalSticker,
   CorphishSticker,
   CombuskenSticker,
+  SnoruntSticker,
   GlalieSticker,
   SceptileSticker,
   CharizardS9Sticker,

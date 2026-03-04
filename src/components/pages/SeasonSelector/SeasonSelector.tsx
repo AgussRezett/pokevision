@@ -8,8 +8,6 @@ import {
   seasonPokemon,
 } from '../../../utils/pokemonSeasons';
 
-// Configuración de Pokémon por temporada
-
 export default function SeasonSelector() {
   const { episodes, loading, error, fetchEpisodes, isWatched } =
     useEpisodeStore();
@@ -68,6 +66,12 @@ export default function SeasonSelector() {
           const progress = Math.round((watchedCount / totalEpisodes) * 100);
           const pokemons = seasonPokemon[season] || [];
 
+          // Obtener el primer y último episodio absoluto de la temporada
+          const seasonAbsoluteStart = seasonEpisodes[0]?.absoluteEpisode || 0;
+          const seasonAbsoluteEnd =
+            seasonEpisodes[seasonEpisodes.length - 1]?.absoluteEpisode || 0;
+          const seasonTotalRange = seasonAbsoluteEnd - seasonAbsoluteStart + 1;
+
           return (
             <Link
               key={season}
@@ -94,41 +98,94 @@ export default function SeasonSelector() {
                 {/* Pokémon Stickers */}
                 {pokemons.length > 0 && (
                   <div className={styles.pokemonStickers}>
-                    {pokemons.map((pokemon, index) => (
-                      <div
-                        key={pokemon.name}
-                        className={styles.stickerWrapper}
-                        style={
-                          {
-                            '--sticker-delay': `${index * 0.1}s`,
-                            '--sticker-rotation': `${(index - 1) * 8}deg`,
-                          } as React.CSSProperties
-                        }
-                      >
-                        <img
-                          src={pokemon.img}
-                          alt={pokemon.name}
-                          className={styles.pokemonSticker}
-                        />
-                      </div>
-                    ))}
+                    {pokemons.map((pokemon, index) => {
+                      const debutEpisode = episodes.find(
+                        (ep) => ep.absoluteEpisode === pokemon.debutEpisode
+                      );
+                      const isUnlocked = debutEpisode
+                        ? isWatched(debutEpisode.code)
+                        : false;
+
+                      return (
+                        <div
+                          key={pokemon.name}
+                          className={`${styles.stickerWrapper} ${!isUnlocked ? styles.locked : ''}`}
+                          style={
+                            {
+                              '--sticker-delay': `${index * 0.1}s`,
+                              '--sticker-rotation': `${(index - 1) * 8}deg`,
+                            } as React.CSSProperties
+                          }
+                        >
+                          <img
+                            src={pokemon.img}
+                            alt={isUnlocked ? pokemon.name : '???'}
+                            className={styles.pokemonSticker}
+                          />
+                          {!isUnlocked && (
+                            <div className={styles.lockIcon}>🔒</div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
 
-                {/* Progress */}
+                {/* Progress con marcadores de Pokémon */}
                 <div className={styles.progressSection}>
                   <div className={styles.progressHeader}>
                     <span className={styles.progressLabel}>Progreso</span>
                     <span className={styles.progressPercent}>{progress}%</span>
                   </div>
-                  <div className={styles.progressBar}>
-                    <div
-                      className={styles.progressFill}
-                      style={{
-                        width: `${progress}%`,
-                        background: getSeasonColor(season),
-                      }}
-                    />
+                  <div className={styles.progressBarWrapper}>
+                    <div className={styles.progressBar}>
+                      <div
+                        className={styles.progressFill}
+                        style={{
+                          width: `${progress}%`,
+                          background: getSeasonColor(season),
+                        }}
+                      />
+                    </div>
+
+                    {/* Marcadores de desbloqueo de Pokémon */}
+                    {pokemons.map((pokemon) => {
+                      // Calcular posición porcentual del debut dentro de la temporada
+                      const debutPosition =
+                        ((pokemon.debutEpisode - seasonAbsoluteStart) /
+                          seasonTotalRange) *
+                        100;
+
+                      // Solo mostrar marcadores si el debut está dentro de esta temporada
+                      const isInThisSeason =
+                        pokemon.debutEpisode >= seasonAbsoluteStart &&
+                        pokemon.debutEpisode <= seasonAbsoluteEnd;
+
+                      if (!isInThisSeason) return null;
+
+                      const debutEpisode = episodes.find(
+                        (ep) => ep.absoluteEpisode === pokemon.debutEpisode
+                      );
+                      const isUnlocked = debutEpisode
+                        ? isWatched(debutEpisode.code)
+                        : false;
+
+                      return (
+                        <div
+                          key={pokemon.name}
+                          className={`${styles.pokemonMarker} ${isUnlocked ? styles.unlocked : ''}`}
+                          style={{
+                            left: `${Math.max(0, Math.min(100, debutPosition))}%`,
+                          }}
+                          title={`${pokemon.name} - Ep. ${pokemon.debutEpisode}`}
+                        >
+                          <div className={styles.markerLine} />
+                          <div className={styles.markerIcon}>
+                            {isUnlocked ? '⭐' : '🔒'}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
