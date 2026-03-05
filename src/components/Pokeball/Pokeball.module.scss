@@ -1,0 +1,105 @@
+@use '../../styles/abstracts/neumorphism' as neu;
+
+.pokeball {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #fff;
+  border: 8px solid #000;
+  overflow: hidden;
+
+  @include neu.neu-inset(50%, 9px);
+
+  &.small {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #000;
+
+    .pokeballCenter {
+      height: 6px;
+    }
+
+    .pokeballButton {
+      width: 20px;
+      height: 20px;
+      border: 4px solid #000;
+    }
+  }
+
+  &.medium {
+    width: 120px;
+    height: 120px;
+    border: 8px solid #000;
+  }
+
+  &.large {
+    width: 160px;
+    height: 160px;
+    border: 10px solid #000;
+
+    .pokeballCenter {
+      height: 20px;
+    }
+
+    .pokeballButton {
+      width: 64px;
+      height: 64px;
+      border: 10px solid #000;
+    }
+  }
+}
+
+// Mitad superior roja
+.pokeballTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: 1;
+  background: #d90404;
+}
+
+// Mitad inferior blanca
+.pokeballBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: #ffffff;
+  z-index: 1;
+}
+
+// Línea divisoria central (conectada con el botón)
+.pokeballCenter {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 102%;
+  height: 16px;
+  background: #000;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+// Botón central (sin punto negro interno)
+.pokeballButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 8px solid #000;
+  aspect-ratio: 1;
+  z-index: 3;
+}
+
+.pokeballButtonInner {
+  // Vacío - sin punto negro
+  display: none;
+}

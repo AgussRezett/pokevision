@@ -40,7 +40,17 @@
 }
 
 .seasonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
 
   h1 {
     font-size: 2rem;
@@ -267,7 +277,7 @@
   }
 }
 
-.clearFiltersButton {
+/* .clearFiltersButton {
   @include neu.neu-button();
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
@@ -283,7 +293,7 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-}
+} */
 
 // Contador de resultados
 .resultsCount {
@@ -404,6 +414,17 @@
   color: var(--danger-text);
 }
 
+.watchContainer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
 .watchButton {
   min-width: 40px;
   width: 40px;
@@ -438,7 +459,7 @@
   }
 }
 
-.episodeCard.watched .watchLink {
+.episodeCard.watched .watchContainer > .watchLink {
   @include neu.neu-card();
   color: var(--text-primary);
 
@@ -538,5 +559,510 @@
 
   &:hover {
     @include neu.neu-pressed();
+  }
+}
+
+.headerContent {
+  flex: 1;
+
+  h1 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    font-weight: 700;
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+  }
+}
+
+.pokemonStickers {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+
+  @media (max-width: 768px) {
+    align-self: center;
+  }
+}
+
+.stickerWrapper {
+  position: relative;
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
+  animation-delay: var(--sticker-delay);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
+    transform: translateY(-10px) rotate(0deg) scale(1.15) !important;
+    z-index: 10;
+  }
+
+  &.locked {
+    .pokemonSticker {
+      filter: brightness(0) opacity(0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    &:hover .pokemonSticker {
+      filter: brightness(0) opacity(0.5);
+    }
+  }
+}
+
+.pokemonSticker {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(var(--sticker-rotation));
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.lockIcon {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: lockBounce 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes lockBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(50px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-10px);
+  }
+
+  70% {
+    transform: scale(0.95) translateY(5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Progress bar wrapper para marcadores
+.progressBarWrapper {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+// Marcadores de Pokémon
+.pokemonMarker {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 5;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateX(-50%) scale(1.2);
+    z-index: 10;
+
+    .markerLine {
+      height: 30px;
+      background: var(--season-color);
+    }
+
+    .markerIcon {
+      transform: scale(1.2);
+    }
+  }
+}
+
+.markerLine {
+  width: 2px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0 auto;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.markerIcon {
+  width: 22px;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  margin-top: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.pokemonMarker.unlocked {
+  .markerLine {
+    background: linear-gradient(to bottom, gold, orange);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  }
+
+  .markerIcon {
+    background: linear-gradient(135deg, gold, orange);
+    border-color: gold;
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  }
+
+  50% {
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.9);
+  }
+}
+
+// Episodio con debut de Pokémon
+.episodeCard.hasDebut {
+  border-left: 3px solid gold;
+}
+
+.debutPokemon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.debutSticker {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) opacity(0.3);
+  transition: all 0.3s ease;
+
+  .unlocked & {
+    filter: none;
+    animation: revealPokemon 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+.debutLock {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.badgeDebut {
+  background: linear-gradient(135deg, gold, orange);
+  color: white;
+  animation: shimmerBadge 2s ease-in-out infinite;
+}
+
+@keyframes shimmerBadge {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+}
+
+@keyframes revealPokemon {
+  0% {
+    filter: brightness(0) opacity(0.3);
+    transform: scale(0.8);
+  }
+
+  50% {
+    filter: brightness(1.2) opacity(1);
+    transform: scale(1.2);
+  }
+
+  100% {
+    filter: brightness(1) opacity(1);
+    transform: scale(1);
+  }
+}
+
+// Modal de captura
+.captureModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.captureOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.captureContent {
+  position: relative;
+  background: linear-gradient(145deg, var(--bg-light), var(--bg-dark));
+  padding: 3rem 2rem;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 1px 1px 2px var(--light),
+    inset -1px -1px 2px var(--dark);
+  animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  @media (max-width: 480px) {
+    margin: 1rem;
+    padding: 2rem 1.5rem;
+  }
+}
+
+.pokeballContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pokeballContent {
+  padding: 4px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--bg-dark), var(--bg-light));
+
+  box-shadow:
+    inset 2px 2px (2px * 2) var(--dark),
+    inset (-2px) (-2px) (2px * 2) var(--dark);
+}
+
+.captureTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 2rem 0;
+  color: var(--text-primary);
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
+}
+
+.capturePokemon {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+  position: relative;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  animation: floatPokemon 2s ease-in-out infinite;
+
+  &.flyingToHeader {
+    animation: flyToHeader 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+
+  @media (max-width: 480px) {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+.capturedSticker {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.captureName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  text-transform: capitalize;
+}
+
+.captureDebut {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 2rem 0;
+}
+
+.captureButton {
+  @include neu.neu-button();
+  padding: 1rem 3rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: linear-gradient(145deg, var(--bg-light), var(--bg-dark));
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    @include neu.neu-button-hover();
+    transform: scale(1.05);
+  }
+
+  &:active {
+    @include neu.neu-button-active();
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sparkleStars {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes twinkleStar {
+  0%,
+  100% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes floatPokemon {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes flyToHeader {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-80vh) translateX(40vw) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.captureModal.animating {
+  .captureContent {
+    animation: fadeOut 1s ease forwards;
+    animation-delay: 0.5s;
+  }
+
+  .captureOverlay {
+    animation: fadeOut 1s ease forwards;
+    animation-delay: 1s;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
   }
 }

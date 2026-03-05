@@ -2,20 +2,33 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from './SeasonDetail.module.scss';
 import { useEpisodeStore } from '../../../store/episodeStore';
-import { getSeasonColor, getSeasonName } from '../../../utils/pokemonSeasons';
+import {
+  getSeasonColor,
+  getSeasonName,
+  seasonPokemon,
+} from '../../../utils/pokemonSeasons';
+import Pokeball from '../../Pokeball/Pokeball';
+
+interface CapturedPokemon {
+  name: string;
+  img: string;
+  debutEpisode: number;
+}
 
 export default function SeasonDetail() {
   const { seasonNumber } = useParams<{ seasonNumber: string }>();
   const { episodes, loading, fetchEpisodes, isWatched, toggleWatched } =
     useEpisodeStore();
 
-  // Cambiar a arrays para permitir múltiples selecciones
   const [filterWatched, setFilterWatched] = useState<
     ('watched' | 'unwatched')[]
   >([]);
   const [filterType, setFilterType] = useState<
     ('canon' | 'filler' | 'censored')[]
   >([]);
+  const [capturedPokemon, setCapturedPokemon] =
+    useState<CapturedPokemon | null>(null);
+  const [showCaptureAnimation, setShowCaptureAnimation] = useState(false);
 
   const season = seasonNumber ? parseInt(seasonNumber, 10) : null;
 
@@ -54,14 +67,15 @@ export default function SeasonDetail() {
     );
   }
 
-  // Estadísticas
   const totalEpisodes = seasonEpisodes.length;
   const watchedCount = seasonEpisodes.filter((ep) => isWatched(ep.code)).length;
   const canonCount = seasonEpisodes.filter((ep) => ep.isCanon).length;
   const fillerCount = seasonEpisodes.filter((ep) => !ep.isCanon).length;
   const progress = Math.round((watchedCount / totalEpisodes) * 100);
 
-  // Funciones de toggle para filtros tipo checkbox
+  const seasonColor = getSeasonColor(season);
+  const pokemons = seasonPokemon[season] || [];
+
   const toggleFilterWatched = (filter: 'watched' | 'unwatched') => {
     setFilterWatched((prev) =>
       prev.includes(filter)
@@ -78,15 +92,12 @@ export default function SeasonDetail() {
     );
   };
 
-  // Limpiar todos los filtros
   const clearAllFilters = () => {
     setFilterWatched([]);
     setFilterType([]);
   };
 
-  // Filtrar episodios con lógica OR (mostrar si cumple CUALQUIERA de los filtros activos)
   const filteredEpisodes = seasonEpisodes.filter((episode) => {
-    // Si no hay filtros de visto/no visto activos, mostrar todos
     let passesWatchedFilter = true;
     if (filterWatched.length > 0) {
       passesWatchedFilter = filterWatched.some((filter) => {
@@ -96,7 +107,6 @@ export default function SeasonDetail() {
       });
     }
 
-    // Si no hay filtros de tipo activos, mostrar todos
     let passesTypeFilter = true;
     if (filterType.length > 0) {
       passesTypeFilter = filterType.some((filter) => {
@@ -113,35 +123,103 @@ export default function SeasonDetail() {
   const handleToggleEpisode = (code: string, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
+
+    const episode = episodes.find((ep) => ep.code === code);
+    if (!episode) return;
+
+    const wasWatched = isWatched(code);
+
+    // Solo mostrar captura si estamos MARCANDO como visto (no desmarcando)
+    if (!wasWatched) {
+      // Verificar si este episodio es debut de algún Pokémon
+      const debutPokemon = pokemons.find(
+        (p) => p.debutEpisode === episode.absoluteEpisode
+      );
+
+      if (debutPokemon) {
+        // Mostrar modal de captura
+        setCapturedPokemon({
+          name: debutPokemon.name,
+          img: debutPokemon.img,
+          debutEpisode: debutPokemon.debutEpisode,
+        });
+      }
+    }
+
     toggleWatched(code);
+  };
+
+  const handleCapturePokemon = () => {
+    setShowCaptureAnimation(true);
+
+    // Después de la animación, cerrar el modal
+    setTimeout(() => {
+      setShowCaptureAnimation(false);
+      setCapturedPokemon(null);
+    }, 2000);
   };
 
   const areFiltersActive = filterWatched.length > 0 || filterType.length > 0;
 
+  const seasonAbsoluteStart = seasonEpisodes[0]?.absoluteEpisode || 0;
+  const seasonAbsoluteEnd =
+    seasonEpisodes[seasonEpisodes.length - 1]?.absoluteEpisode || 0;
+  const seasonTotalRange = seasonAbsoluteEnd - seasonAbsoluteStart + 1;
+
   return (
     <div className={styles.container}>
-      {/* Header con botón de volver */}
       <div className={styles.backNav}>
         <Link to="/" className={styles.backLink}>
           ← Volver a Temporadas
         </Link>
       </div>
 
-      {/* Card de información de temporada */}
       <div
         className={styles.seasonCard}
-        style={
-          { '--season-color': getSeasonColor(season) } as React.CSSProperties
-        }
+        style={{ '--season-color': seasonColor } as React.CSSProperties}
+        id="pokemon-header"
       >
         <div className={styles.seasonHeader}>
-          <div>
+          <div className={styles.headerContent}>
             <h1>Temporada {season}</h1>
             <p>{getSeasonName(season)}</p>
           </div>
+
+          {pokemons.length > 0 && (
+            <div className={styles.pokemonStickers}>
+              {pokemons.map((pokemon, index) => {
+                const debutEpisode = episodes.find(
+                  (ep) => ep.absoluteEpisode === pokemon.debutEpisode
+                );
+                const isUnlocked = debutEpisode
+                  ? isWatched(debutEpisode.code)
+                  : false;
+
+                return (
+                  <div
+                    key={pokemon.name}
+                    className={`${styles.stickerWrapper} ${!isUnlocked ? styles.locked : ''}`}
+                    style={
+                      {
+                        '--sticker-delay': `${index * 0.1}s`,
+                        '--sticker-rotation': `${(index - 1) * 12}deg`,
+                      } as React.CSSProperties
+                    }
+                    id={`pokemon-${pokemon.name}`}
+                  >
+                    <img
+                      src={pokemon.img}
+                      alt={isUnlocked ? pokemon.name : '???'}
+                      className={styles.pokemonSticker}
+                    />
+                    {!isUnlocked && <div className={styles.lockIcon}>🔒</div>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Estadísticas */}
         <div className={styles.statsGrid}>
           <div className={styles.statCard}>
             <span className={styles.statLabel}>Vistos</span>
@@ -166,26 +244,72 @@ export default function SeasonDetail() {
           </div>
         </div>
 
-        {/* Barra de progreso */}
         <div className={styles.progressSection}>
           <div className={styles.progressHeader}>
             <span className={styles.progressLabel}>Progreso General</span>
             <span className={styles.progressPercent}>{progress}%</span>
           </div>
-          <div className={styles.progressBar}>
-            <div
-              className={styles.progressFill}
-              style={{
-                width: `${progress}%`,
-                background: getSeasonColor(season),
-              }}
-            />
+          <div className={styles.progressBarWrapper}>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{
+                  width: `${progress}%`,
+                  background: seasonColor,
+                }}
+              />
+            </div>
+
+            {pokemons.map((pokemon) => {
+              const debutPosition =
+                ((pokemon.debutEpisode - seasonAbsoluteStart) /
+                  seasonTotalRange) *
+                100;
+
+              const isInThisSeason =
+                pokemon.debutEpisode >= seasonAbsoluteStart &&
+                pokemon.debutEpisode <= seasonAbsoluteEnd;
+
+              if (!isInThisSeason) return null;
+
+              const debutEpisode = episodes.find(
+                (ep) => ep.absoluteEpisode === pokemon.debutEpisode
+              );
+              const isUnlocked = debutEpisode
+                ? isWatched(debutEpisode.code)
+                : false;
+
+              return (
+                <div
+                  key={pokemon.name}
+                  className={`${styles.pokemonMarker} ${isUnlocked ? styles.unlocked : ''}`}
+                  style={{
+                    left: `${Math.max(0, Math.min(100, debutPosition))}%`,
+                  }}
+                  title={`${pokemon.name} - Ep. ${pokemon.debutEpisode}`}
+                >
+                  <div className={styles.markerLine} />
+                  <div className={styles.markerIcon}>
+                    {isUnlocked ? '⭐' : '🔒'}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Filtros */}
       <div className={styles.filtersCard}>
+        <button
+          className={`${styles.filterIconContainer} ${areFiltersActive && styles.filtersActive}`}
+          onClick={clearAllFilters}
+        >
+          <span className={styles.filterIcon}>🔍</span>
+          {areFiltersActive && (
+            <span className={styles.clearFiltersBubble}>✕</span>
+          )}
+        </button>
+
         <div className={styles.filtersContainer}>
           <div className={styles.filterGroup}>
             <label className={styles.filterLabel}>
@@ -222,7 +346,9 @@ export default function SeasonDetail() {
             <label className={styles.filterLabel}>
               Tipo de episodio
               {filterType.length > 0 && (
-                <span className={styles.filterCount}>{filterType.length}</span>
+                <span className={styles.filterCount}>
+                  ({filterType.length})
+                </span>
               )}
             </label>
             <div className={styles.filterButtons}>
@@ -258,7 +384,6 @@ export default function SeasonDetail() {
         </div>
       </div>
 
-      {/* Contador de resultados */}
       <div className={styles.resultsCount}>
         Mostrando {filteredEpisodes.length} de {totalEpisodes} episodios
         {areFiltersActive && (
@@ -268,7 +393,6 @@ export default function SeasonDetail() {
         )}
       </div>
 
-      {/* Lista de episodios */}
       <div className={styles.episodesList}>
         {filteredEpisodes.length === 0 ? (
           <div className={styles.noResults}>
@@ -285,21 +409,36 @@ export default function SeasonDetail() {
             .sort((a, b) => a.episode - b.episode)
             .map((episode) => {
               const watched = isWatched(episode.code);
+              const debutPokemon = pokemons.find(
+                (p) => p.debutEpisode === episode.absoluteEpisode
+              );
 
               return (
                 <div
                   key={episode.code}
-                  className={`${styles.episodeCard} ${watched ? styles.watched : ''}`}
+                  className={`${styles.episodeCard} ${watched ? styles.watched : ''} ${debutPokemon ? styles.hasDebut : ''}`}
                 >
-                  {/* Número del episodio en círculo */}
                   <div
                     className={styles.episodeNumber}
-                    style={{ background: getSeasonColor(season) }}
+                    style={{ background: seasonColor }}
                   >
                     {episode.absoluteEpisode}
                   </div>
 
-                  {/* Contenido del episodio */}
+                  {/* Silueta de Pokémon debut */}
+                  {debutPokemon && (
+                    <div
+                      className={`${styles.debutPokemon} ${watched ? styles.unlocked : ''}`}
+                    >
+                      <img
+                        src={debutPokemon.img}
+                        alt={watched ? debutPokemon.name : '???'}
+                        className={styles.debutSticker}
+                      />
+                      {!watched && <div className={styles.debutLock}>🔒</div>}
+                    </div>
+                  )}
+
                   <div className={styles.episodeContent}>
                     <h4 className={styles.episodeTitle}>
                       Episodio {episode.episode}: {episode.name}
@@ -319,32 +458,87 @@ export default function SeasonDetail() {
                           🚫 Censurado
                         </span>
                       )}
+
+                      {debutPokemon && (
+                        <span
+                          className={`${styles.badge} ${styles.badgeDebut}`}
+                        >
+                          ⭐ Debut
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  {/* Botón de marcar visto */}
-                  <button
-                    onClick={(e) => handleToggleEpisode(episode.code, e)}
-                    className={`${styles.watchButton} ${watched ? styles.watched : ''}`}
-                    title={
-                      watched ? 'Marcar como no visto' : 'Marcar como visto'
-                    }
-                  >
-                    {watched ? '✓' : '○'}
-                  </button>
+                  <div className={styles.watchContainer}>
+                    <Link
+                      to={`/season/${season}/episode/${episode.episode}`}
+                      className={styles.watchLink}
+                    >
+                      ▶ Ver
+                    </Link>
 
-                  {/* Botón de ver */}
-                  <Link
-                    to={`/season/${season}/episode/${episode.episode}`}
-                    className={styles.watchLink}
-                  >
-                    ▶ Ver
-                  </Link>
+                    <button
+                      onClick={(e) => handleToggleEpisode(episode.code, e)}
+                      className={`${styles.watchButton} ${watched ? styles.watched : ''}`}
+                      title={
+                        watched ? 'Marcar como no visto' : 'Marcar como visto'
+                      }
+                    >
+                      {watched ? '✓' : '○'}
+                    </button>
+                  </div>
                 </div>
               );
             })
         )}
       </div>
+
+      {/* Modal de captura de Pokémon */}
+      {capturedPokemon && (
+        <div
+          className={`${styles.captureModal} ${showCaptureAnimation ? styles.animating : ''}`}
+        >
+          <div
+            className={styles.captureOverlay}
+            onClick={() => !showCaptureAnimation && setCapturedPokemon(null)}
+          />
+
+          <div className={styles.captureContent}>
+            <div className={styles.pokeballContainer}>
+              <div className={styles.pokeballContent}>
+                <Pokeball size="small" />
+              </div>
+            </div>
+
+            <h2 className={styles.captureTitle}>¡Pokémon Capturado!</h2>
+
+            <div
+              className={`${styles.capturePokemon} ${showCaptureAnimation ? styles.flyingToHeader : ''}`}
+              id="captured-pokemon-img"
+            >
+              <img
+                src={capturedPokemon.img}
+                alt={capturedPokemon.name}
+                className={styles.capturedSticker}
+              />
+            </div>
+
+            <p className={styles.captureName}>{capturedPokemon.name}</p>
+            <p className={styles.captureDebut}>
+              Episodio debut #{capturedPokemon.debutEpisode}
+            </p>
+
+            {!showCaptureAnimation && (
+              <button
+                onClick={handleCapturePokemon}
+                className={styles.captureButton}
+              >
+                ⚡ Capturar
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
