@@ -105,15 +105,18 @@ const parseEpisodeUrl = (
 };
 
 const cleanName = (name: string): string => {
-  return name
-    .replace(/^[_\-\s]+/, '')
-    .replace(/[_\-\s]+$/, '')
-    .replace(/[_]+/g, ' ')
-    .replace(/[-]+/g, ' ')
-    .replace(/\s+/g, ' ')
+  const parsedName = name
+  .replace(/^[_\-\s]+/, '')
+  .replace(/[_\-\s]+$/, '')
+  .replace(/[_]+/g, ' ')
+  .replace(/[-]+/g, ' ')
+  .replace(/\s+/g, ' ')
+    .replace('realesrgan', '')
     .replace(/\s*!\s*/g, '!')
     .replace(/\s*\?\s*/g, '?')
-    .trim();
+    .trim()
+    .toLocaleLowerCase();
+    return parsedName.charAt(0).toUpperCase() + parsedName.slice(1).toLowerCase();
 };
 
 const loadWatchedEpisodes = (): Set<string> => {
@@ -183,20 +186,6 @@ export const useEpisodeStore = create<EpisodeStore>((set, get) => ({
         .filter((ep): ep is Episode => ep !== null);
 
       parsedEpisodes = assignAbsoluteNumbersAndCanon(parsedEpisodes);
-
-      console.log(
-        `Total de episodios parseados: ${parsedEpisodes.length} de ${urls.length} URLs`
-      );
-      console.log(
-        `Episodios canon: ${parsedEpisodes.filter((ep) => ep.isCanon).length}`
-      );
-      console.log(
-        `Episodios relleno: ${parsedEpisodes.filter((ep) => !ep.isCanon).length}`
-      );
-      console.log(
-        `Episodios censurados: ${parsedEpisodes.filter((ep) => ep.isCensored).length}`
-      );
-
       set({ episodes: parsedEpisodes, loading: false });
     } catch (error) {
       set({
@@ -211,9 +200,6 @@ export const useEpisodeStore = create<EpisodeStore>((set, get) => ({
   },
 
   getEpisodeBySeasonAndNumber: (season: number, episode: number) => {
-    console.log(season);
-    console.log(episode);
-
     return get().episodes.find(
       (ep) => ep.season === season && ep.episode === episode
     );

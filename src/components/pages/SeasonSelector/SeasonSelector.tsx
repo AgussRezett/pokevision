@@ -8,6 +8,7 @@ import {
   seasonPokemon,
 } from '../../../utils/pokemonSeasons';
 import PageTransition from '../../PageTransition/PageTransition';
+import { LockKeyIcon, StarIcon } from '@phosphor-icons/react';
 
 export default function SeasonSelector() {
   const { episodes, loading, error, fetchEpisodes, isWatched } =
@@ -128,7 +129,7 @@ export default function SeasonSelector() {
                               className={styles.pokemonSticker}
                             />
                             {!isUnlocked && (
-                              <div className={styles.lockIcon}>🔒</div>
+                              <div className={styles.lockIcon}><LockKeyIcon size={14} weight="fill" /></div>
                             )}
                           </div>
                         );
@@ -188,7 +189,7 @@ export default function SeasonSelector() {
                           >
                             <div className={styles.markerLine} />
                             <div className={styles.markerIcon}>
-                              {isUnlocked ? '⭐' : '🔒'}
+                              {isUnlocked ? <StarIcon size={12} weight="fill" color='yellow' /> : <LockKeyIcon size={12} weight="fill" />}
                             </div>
                           </div>
                         );

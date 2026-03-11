@@ -197,10 +197,13 @@
 }
 
 .filterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 0.625rem 1.25rem;
   border-radius: 12px;
   border: none;
-  background: var(--bg-secondary);
   color: var(--text-primary);
   font-weight: 500;
   font-size: 0.9rem;
@@ -225,23 +228,12 @@
     font-weight: 600;
   }
 
-  &.canon.active {
-    color: var(--success-text);
-  }
 
-  &.filler.active {
-    color: var(--warning-text);
-  }
-
-  &.censored.active {
-    color: var(--danger-text);
-  }
 }
 
 .checkmark {
-  margin-right: 0.5rem;
   font-weight: bold;
-  color: var(--accent-primary);
+  color: var(--color-secondary);
 }
 
 .filterCount {
@@ -257,7 +249,7 @@
 
   @include neu.neu-card();
   color: var(--text-primary);
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
 }
 
 .clearFiltersText {
@@ -343,13 +335,13 @@
 }
 
 .episodeNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 50px;
   min-height: 50px;
   width: 50px;
   height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.25rem;
   font-weight: 700;
   color: white;
@@ -377,7 +369,6 @@
   font-size: 1rem;
   color: var(--text-primary);
   font-weight: 600;
-  text-transform: capitalize;
 
   @media (max-width: 768px) {
     font-size: 0.95rem;
@@ -391,6 +382,10 @@
 }
 
 .badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
   padding: 0.25rem 0.875rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -415,9 +410,9 @@
 
 .watchContainer {
   display: flex;
-  gap: 0.75rem;
   justify-content: center;
   align-items: center;
+  gap: 0.75rem;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -448,7 +443,7 @@
   }
 
   &.watched {
-    color: var(--success-text);
+    color: var(--color-primary);
     font-weight: bold;
     @include neu.neu-card();
 
@@ -458,7 +453,7 @@
   }
 }
 
-.episodeCard.watched .watchContainer > .watchLink {
+.episodeCard.watched .watchContainer>.watchLink {
   @include neu.neu-card();
   color: var(--text-primary);
 
@@ -468,6 +463,10 @@
 }
 
 .watchLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   padding: 0.625rem 1.25rem;
   border-radius: 12px;
   text-decoration: none;
@@ -477,11 +476,9 @@
   white-space: nowrap;
 
   @include neu.neu-card();
-  background: linear-gradient(
-    360deg,
-    var(--color-primary),
-    var(--color-secondary)
-  );
+  background: linear-gradient(360deg,
+      var(--color-primary),
+      var(--color-secondary));
   color: #2c3e50;
   transition: all 500ms ease;
 
@@ -643,10 +640,12 @@
   justify-content: center;
   font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  @include neu.neu-card();
   animation: lockBounce 1s ease-in-out infinite;
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 0.3;
@@ -658,6 +657,7 @@
 }
 
 @keyframes lockBounce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -730,7 +730,7 @@
 .markerIcon {
   width: 22px;
   height: 22px;
-  background: rgba(0, 0, 0, 0.7);
+  background: color-mix(var(--bg), transparent 5%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -756,6 +756,7 @@
 }
 
 @keyframes sparkle {
+
   0%,
   100% {
     box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
@@ -766,11 +767,6 @@
   }
 }
 
-// Episodio con debut de Pokémon
-.episodeCard.hasDebut {
-  border-left: 3px solid gold;
-}
-
 .debutPokemon {
   position: relative;
   width: 60px;
@@ -778,7 +774,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 1rem;
 
   @media (max-width: 768px) {
     width: 50px;
@@ -805,7 +800,7 @@
   right: -5px;
   width: 20px;
   height: 20px;
-  background: rgba(0, 0, 0, 0.8);
+  background: color-mix(var(--bg), transparent 5%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -821,6 +816,7 @@
 }
 
 @keyframes shimmerBadge {
+
   0%,
   100% {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
@@ -873,6 +869,9 @@
 }
 
 .captureContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   background: linear-gradient(145deg, var(--bg-light), var(--bg-dark));
   padding: 3rem 2rem;
@@ -957,6 +956,9 @@
 }
 
 .captureButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @include neu.neu-button();
   padding: 1rem 3rem;
   font-size: 1.25rem;
@@ -1002,6 +1004,7 @@
 }
 
 @keyframes sparkleStars {
+
   0%,
   100% {
     transform: scale(1);
@@ -1013,6 +1016,7 @@
 }
 
 @keyframes twinkleStar {
+
   0%,
   100% {
     opacity: 1;
@@ -1026,6 +1030,7 @@
 }
 
 @keyframes floatPokemon {
+
   0%,
   100% {
     transform: translateY(0);

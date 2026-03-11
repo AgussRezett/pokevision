@@ -9,6 +9,7 @@ import {
 } from '../../../utils/pokemonSeasons';
 import Pokeball from '../../Pokeball/Pokeball';
 import PageTransition from '../../PageTransition/PageTransition';
+import { BookOpenTextIcon, CheckIcon, CircleIcon, LightningIcon, LockKeyIcon, PlayIcon, ProhibitIcon, RepeatIcon, StarIcon, XIcon } from '@phosphor-icons/react';
 
 interface CapturedPokemon {
   name: string;
@@ -172,7 +173,7 @@ export default function SeasonDetail() {
       <div className={styles.container}>
         <div className={styles.backNav}>
           <Link to="/" className={styles.backLink}>
-            ← Volver a Temporadas
+            <XIcon size={16} weight="bold" /> Volver a Temporadas
           </Link>
         </div>
 
@@ -214,7 +215,7 @@ export default function SeasonDetail() {
                         alt={isUnlocked ? pokemon.name : '???'}
                         className={styles.pokemonSticker}
                       />
-                      {!isUnlocked && <div className={styles.lockIcon}>🔒</div>}
+                      {!isUnlocked && <div className={styles.lockIcon}><LockKeyIcon size={14} weight="fill" /></div>}
                     </div>
                   );
                 })}
@@ -292,7 +293,7 @@ export default function SeasonDetail() {
                   >
                     <div className={styles.markerLine} />
                     <div className={styles.markerIcon}>
-                      {isUnlocked ? '⭐' : '🔒'}
+                      {isUnlocked ? <StarIcon size={12} weight="fill" color='yellow' /> : <LockKeyIcon size={12} weight="fill" />}
                     </div>
                   </div>
                 );
@@ -302,23 +303,13 @@ export default function SeasonDetail() {
         </div>
 
         <div className={styles.filtersCard}>
-          <button
-            className={`${styles.filterIconContainer} ${areFiltersActive && styles.filtersActive}`}
-            onClick={clearAllFilters}
-          >
-            <span className={styles.filterIcon}>🔍</span>
-            {areFiltersActive && (
-              <span className={styles.clearFiltersBubble}>✕</span>
-            )}
-          </button>
-
           <div className={styles.filtersContainer}>
             <div className={styles.filterGroup}>
               <label className={styles.filterLabel}>
                 Estado de visualización
                 {filterWatched.length > 0 && (
                   <span className={styles.filterCount}>
-                    ({filterWatched.length})
+                    {filterWatched.length}
                   </span>
                 )}
               </label>
@@ -330,7 +321,7 @@ export default function SeasonDetail() {
                   {filterWatched.includes('watched') && (
                     <span className={styles.checkmark}>✓</span>
                   )}
-                  👁️ Vistos
+                  Vistos
                 </button>
                 <button
                   onClick={() => toggleFilterWatched('unwatched')}
@@ -339,7 +330,7 @@ export default function SeasonDetail() {
                   {filterWatched.includes('unwatched') && (
                     <span className={styles.checkmark}>✓</span>
                   )}
-                  🚫 No vistos
+                  No vistos
                 </button>
               </div>
             </div>
@@ -349,7 +340,7 @@ export default function SeasonDetail() {
                 Tipo de episodio
                 {filterType.length > 0 && (
                   <span className={styles.filterCount}>
-                    ({filterType.length})
+                    {filterType.length}
                   </span>
                 )}
               </label>
@@ -440,7 +431,7 @@ export default function SeasonDetail() {
                           alt={watched ? debutPokemon.name : '???'}
                           className={styles.debutSticker}
                         />
-                        {!watched && <div className={styles.debutLock}>🔒</div>}
+                        {!watched && <div className={styles.debutLock}><LockKeyIcon size={14} weight="fill" /></div>}
                       </div>
                     )}
 
@@ -453,14 +444,14 @@ export default function SeasonDetail() {
                         <span
                           className={`${styles.badge} ${episode.isCanon ? styles.badgeCanon : styles.badgeFiller}`}
                         >
-                          {episode.isCanon ? '📖 Historia' : '🔄 Relleno'}
+                          {episode.isCanon ? <><BookOpenTextIcon size={14} weight='fill' /> Historia</> : <><RepeatIcon size={14} weight="fill" />  Relleno</>}
                         </span>
 
                         {episode.isCensored && (
                           <span
                             className={`${styles.badge} ${styles.badgeCensored}`}
                           >
-                            🚫 Censurado
+                            <ProhibitIcon size={14} weight="fill" /> Censurado
                           </span>
                         )}
 
@@ -468,7 +459,7 @@ export default function SeasonDetail() {
                           <span
                             className={`${styles.badge} ${styles.badgeDebut}`}
                           >
-                            ⭐ Debut
+                            <StarIcon size={14} weight='fill' /> Debut
                           </span>
                         )}
                       </div>
@@ -479,7 +470,7 @@ export default function SeasonDetail() {
                         to={`/season/${season}/episode/${episode.episode}`}
                         className={styles.watchLink}
                       >
-                        ▶ Ver
+                        <PlayIcon size={14} weight="fill" /> Ver
                       </Link>
 
                       <button
@@ -489,7 +480,7 @@ export default function SeasonDetail() {
                           watched ? 'Marcar como no visto' : 'Marcar como visto'
                         }
                       >
-                        {watched ? '✓' : '○'}
+                        {watched ? <CheckIcon size={24} weight="bold" /> : <CircleIcon size={24} />}
                       </button>
                     </div>
                   </div>
@@ -538,7 +529,7 @@ export default function SeasonDetail() {
                   onClick={handleCapturePokemon}
                   className={styles.captureButton}
                 >
-                  ⚡ Capturar
+                  <LightningIcon size={32} weight="duotone" /> Capturar
                 </button>
               )}
             </div>
