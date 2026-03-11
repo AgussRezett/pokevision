@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import styles from './EpisodePlayer.module.scss';
 import { useEpisodeStore } from '../../../store/episodeStore';
 import { getSeasonColor, getSeasonName } from '../../../utils/pokemonSeasons';
+import PlayerTransition from '../../PageTransition/PlayerTransition';
 
 export default function EpisodePlayer() {
   const { seasonNumber, episodeNumber } = useParams<{
@@ -99,29 +100,42 @@ export default function EpisodePlayer() {
     setShowControls((prev) => !prev);
   };
 
+  useEffect(() => {
+    document.body.classList.add('player-active');
+
+    return () => {
+      document.body.classList.remove('player-active');
+    };
+  }, []);
+
   if (episodes.length === 0) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loader}></div>
-        <h2>Cargando...</h2>
-      </div>
+      <PlayerTransition>
+        <div className={styles.loadingContainer}>
+          <div className={styles.loader}></div>
+          <h2>Cargando...</h2>
+        </div>
+      </PlayerTransition>
     );
   }
 
   if (!episode) {
     return (
-      <div className={styles.errorContainer}>
-        <h2>Error</h2>
-        <p>
-          No se encontró el episodio (Temporada {season}, Episodio {episodeNum})
-        </p>
-        <Link
-          to={season ? `/season/${season}` : '/'}
-          className={styles.backButton}
-        >
-          Volver
-        </Link>
-      </div>
+      <PlayerTransition>
+        <div className={styles.errorContainer}>
+          <h2>Error</h2>
+          <p>
+            No se encontró el episodio (Temporada {season}, Episodio{' '}
+            {episodeNum})
+          </p>
+          <Link
+            to={season ? `/season/${season}` : '/'}
+            className={styles.backButton}
+          >
+            Volver
+          </Link>
+        </div>
+      </PlayerTransition>
     );
   }
 

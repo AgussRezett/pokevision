@@ -13,12 +13,18 @@ body {
     'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--bg-gradient-1);
   color: var(--text-primary);
-  transition:
-    background var(--transition-speed) ease,
-    color var(--transition-speed) ease;
+  transition: color var(--transition-speed) ease;
   min-height: 100vh;
+}
+
+body {
+  background: var(--bg-gradient-1);
+  transition: background var(--transition-speed) ease;
+}
+
+body.player-active {
+  background: #000;
 }
 
 #root {
