@@ -1,9 +1,9 @@
 import { MoonIcon, SunIcon } from '@phosphor-icons/react';
-import { useTheme } from '../../contexts/ThemeContext';
-import styles from './ThemeToggle.module.scss';
-import { useSounds } from '../../hooks/useSounds';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useSounds } from '@/hooks/useSounds';
+import styles from './ThemeToggleButton.module.scss';
 
-export default function ThemeToggle() {
+export default function ThemeToggleButton() {
   const { theme, toggleTheme } = useTheme();
   const { play } = useSounds();
 

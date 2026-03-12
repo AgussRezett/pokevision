@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from './SeasonDetail.module.scss';
-import { useEpisodeStore } from '../../../store/episodeStore';
+import { useEpisodeStore } from '@/store/episodeStore';
 import {
   getSeasonColor,
   getSeasonName,
   seasonPokemon,
-} from '../../../utils/pokemonSeasons';
-import Pokeball from '../../Pokeball/Pokeball';
-import PageTransition from '../../PageTransition/PageTransition';
+} from '@/utils/pokemonSeasons';
+import Pokeball from '@/components/Pokeball/Pokeball';
+import PageTransition from '@/components/pages/PageTransition/PageTransition';
 import {
   BookOpenTextIcon,
   CheckIcon,
@@ -21,7 +21,7 @@ import {
   StarIcon,
   XIcon,
 } from '@phosphor-icons/react';
-import { useSounds } from '../../../hooks/useSounds';
+import { useSounds } from '@/hooks/useSounds';
 
 interface CapturedPokemon {
   name: string;

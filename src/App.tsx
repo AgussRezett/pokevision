@@ -1,12 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './contexts/ThemeContext';
-import Layout from './components/layout/Layout';
-import SeasonSelector from './components/pages/SeasonSelector/SeasonSelector';
-import EpisodePlayer from './components/pages/EpisodePlayer/EpisodePlayer';
-import SeasonDetail from './components/pages/SeasonDetail/SeasonDetail';
-
-import { useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import Layout from '@/components/layout/Layout';
+import SeasonSelector from '@/components/pages/SeasonSelector/SeasonSelector';
+import SeasonDetail from '@/components/pages/SeasonDetail/SeasonDetail';
+import EpisodePlayer from '@/components/pages/EpisodePlayer/EpisodePlayer';
 
 function AnimatedRoutes() {
   const location = useLocation();

@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SeasonSelector.module.scss';
-import { useEpisodeStore } from '../../../store/episodeStore';
+import { useEpisodeStore } from '@/store/episodeStore';
 import {
   getSeasonColor,
   getSeasonName,
   seasonPokemon,
-} from '../../../utils/pokemonSeasons';
-import PageTransition from '../../PageTransition/PageTransition';
+} from '@/utils/pokemonSeasons';
+import PageTransition from '@/components/pages/PageTransition/PageTransition';
+import { useSounds } from '@/hooks/useSounds';
 import { LockKeyIcon, StarIcon } from '@phosphor-icons/react';
-import { useSounds } from '../../../hooks/useSounds';
 
 export default function SeasonSelector() {
   const { episodes, loading, error, fetchEpisodes, isWatched } =

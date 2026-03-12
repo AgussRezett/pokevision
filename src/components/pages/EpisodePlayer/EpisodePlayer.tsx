@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import styles from './EpisodePlayer.module.scss';
-import { useEpisodeStore } from '../../../store/episodeStore';
-import { getSeasonColor, getSeasonName } from '../../../utils/pokemonSeasons';
-import PlayerTransition from '../../PageTransition/PlayerTransition';
+import { useEpisodeStore } from '@/store/episodeStore';
+import { getSeasonColor, getSeasonName } from '@/utils/pokemonSeasons';
+import PlayerTransition from '@/components/pages/PageTransition/PlayerTransition';
 import {
   ArrowCircleLeftIcon,
   BookOpenTextIcon,
@@ -14,7 +14,7 @@ import {
   SkipBackIcon,
   SkipForwardIcon,
 } from '@phosphor-icons/react';
-import { useSounds } from '../../../hooks/useSounds';
+import { useSounds } from '@/hooks/useSounds';
 
 export default function EpisodePlayer() {
   const { seasonNumber, episodeNumber } = useParams<{

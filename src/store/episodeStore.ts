@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import EPISODES_JSON from '../data/urls.json';
+import EPISODES_JSON from '@/data/urls.json';
 import {
   CANON_EPISODES_STRING,
   NON_CANON_EPISODES_STRING,
   CENSORED_EPISODES,
   parseEpisodes,
-} from '../utils/canon';
+} from '@/utils/canon';
 
 const WATCHED_EPISODES_KEY = 'pokemon_watched_episodes';
 

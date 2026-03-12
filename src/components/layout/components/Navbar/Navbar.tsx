@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import ThemeToggleButton from '@/components/ThemeToggleButton/ThemeToggleButton';
 import styles from './Navbar.module.scss';
 
 export default function Navbar() {
@@ -17,7 +17,7 @@ export default function Navbar() {
         </Link>
 
         <div className={styles.navActions}>
-          <ThemeToggle />
+          <ThemeToggleButton />
         </div>
       </div>
     </nav>

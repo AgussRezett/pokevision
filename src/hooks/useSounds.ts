@@ -1,12 +1,12 @@
 import { useRef, useCallback, useEffect } from 'react';
 
-import startSound from '../assets/sounds/ui/start.mp3';
-import selectSound from '../assets/sounds/ui/select.mp3';
-import backSound from '../assets/sounds/ui/go back.mp3';
-import claimSound from '../assets/sounds/ui/claim.mp3';
-import unlockSound from '../assets/sounds/ui/unlock.mp3';
-import toggleOnSound from '../assets/sounds/ui/toggle_on.mp3';
-import toggleOffSound from '../assets/sounds/ui/toggle_off.mp3';
+import startSound from '@/assets/sounds/ui/start.mp3';
+import selectSound from '@/assets/sounds/ui/select.mp3';
+import backSound from '@/assets/sounds/ui/go back.mp3';
+import claimSound from '@/assets/sounds/ui/claim.mp3';
+import unlockSound from '@/assets/sounds/ui/unlock.mp3';
+import toggleOnSound from '@/assets/sounds/ui/toggle_on.mp3';
+import toggleOffSound from '@/assets/sounds/ui/toggle_off.mp3';
 
 type SoundName =
   | 'start'
