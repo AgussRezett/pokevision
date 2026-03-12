@@ -10,18 +10,18 @@
   border-radius: 50%;
   aspect-ratio: 1 / 1;
 
-  @include neu.neu-button();
+  @include neu.neu-card();
+  transition: all 150ms ease;
 
   &:hover {
-    @include neu.neu-button-hover();
+    transform: scale(1.05);
   }
 
   &:active {
-    @include neu.neu-button-active();
+    @include neu.neu-inset(50%, 6px);
   }
 
   .icon {
-    font-size: 1rem;
     display: flex;
     align-items: center;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));

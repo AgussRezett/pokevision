@@ -5,8 +5,17 @@ import selectSound from '../assets/sounds/ui/select.mp3';
 import backSound from '../assets/sounds/ui/go back.mp3';
 import claimSound from '../assets/sounds/ui/claim.mp3';
 import unlockSound from '../assets/sounds/ui/unlock.mp3';
+import toggleOnSound from '../assets/sounds/ui/toggle_on.mp3';
+import toggleOffSound from '../assets/sounds/ui/toggle_off.mp3';
 
-type SoundName = 'start' | 'select' | 'claim' | 'back' | 'unlock';
+type SoundName =
+  | 'start'
+  | 'select'
+  | 'claim'
+  | 'back'
+  | 'unlock'
+  | 'toggle_on'
+  | 'toggle_off';
 
 const SOUND_PATHS: Record<SoundName, string> = {
   start: startSound,
@@ -14,6 +23,8 @@ const SOUND_PATHS: Record<SoundName, string> = {
   claim: claimSound,
   back: backSound,
   unlock: unlockSound,
+  toggle_on: toggleOnSound,
+  toggle_off: toggleOffSound,
 };
 
 export function useSounds() {
@@ -24,7 +35,7 @@ export function useSounds() {
     Object.entries(SOUND_PATHS).forEach(([name, path]) => {
       const audio = new Audio(path);
       audio.preload = 'auto';
-      audio.volume = 0.3; // Volumen por defecto
+      audio.volume = 0.7; // Volumen por defecto
       audioCache.current.set(name as SoundName, audio);
     });
 
