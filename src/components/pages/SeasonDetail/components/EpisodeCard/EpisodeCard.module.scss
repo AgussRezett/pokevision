@@ -1,0 +1,278 @@
+@use '../../../../../styles/abstracts/neumorphism' as neu;
+
+
+.episodeCard {
+  padding: 1.25rem;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+
+  // 🔹 NO VISTO (default)
+  @include neu.neu-card(18px, 22px);
+
+  &.watched {
+    // 🔹 VISTO
+    @include neu.neu-card(18px, 22px);
+    transform: none;
+  }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+.episodeCard.watched .episodeNumber {
+  background: #7a7a7a !important;
+  outline: 0px solid #7a7a7a;
+}
+
+.episodeNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  min-height: 50px;
+  width: 50px;
+  height: 50px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+
+  outline: 2px solid var(--color-primary);
+  @include neu.neu-card(9px, 22px);
+  transition: outline 25ms ease-in;
+
+  @media (max-width: 768px) {
+    min-width: 45px;
+    min-height: 45px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}
+
+.episodeContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.episodeTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+  }
+}
+
+.episodeMeta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badgeCanon {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.badgeFiller {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.badgeCensored {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.watchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.watchButton {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include neu.neu-card(50%);
+  transition: all 500ms ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    @include neu.neu-inset(50%, 6px);
+  }
+
+  &.watched {
+    color: var(--color-primary);
+    font-weight: bold;
+    @include neu.neu-card();
+
+    &:active {
+      @include neu.neu-inset(null, 6px);
+    }
+  }
+}
+
+.episodeCard.watched .watchContainer>.watchLink {
+  @include neu.neu-card();
+  color: var(--text-primary);
+
+  &:active {
+    @include neu.neu-inset(null, 6px);
+  }
+}
+
+.watchLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0.625rem 1.25rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 200ms ease;
+  white-space: nowrap;
+
+  @include neu.neu-card();
+  background: linear-gradient(360deg,
+      var(--color-primary),
+      var(--color-secondary));
+  color: #2c3e50;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background: linear-gradient(145deg,
+        var(--color-primary),
+        var(--color-secondary));
+    box-shadow:
+      inset 6px 6px (6px * 2) var(--dark),
+      inset (-6px) (-6px) (6px * 2) var(--light);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+
+.debutPokemon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.debutSticker {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) opacity(0.3);
+  transition: all 0.3s ease;
+
+  .unlocked & {
+    filter: none;
+    animation: revealPokemon 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+.debutLock {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background: color-mix(var(--bg), transparent 5%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.badgeDebut {
+  background: linear-gradient(135deg, gold, orange);
+  color: white;
+  animation: shimmerBadge 2s ease-in-out infinite;
+}
+
+@keyframes shimmerBadge {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+}
+
+@keyframes revealPokemon {
+  0% {
+    filter: brightness(0) opacity(0.3);
+    transform: scale(0.8);
+  }
+
+  50% {
+    filter: brightness(1.2) opacity(1);
+    transform: scale(1.2);
+  }
+
+  100% {
+    filter: brightness(1) opacity(1);
+    transform: scale(1);
+  }
+}

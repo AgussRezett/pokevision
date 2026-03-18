@@ -1,0 +1,226 @@
+@use '../../../../../styles/abstracts/neumorphism' as neu;
+
+.captureModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.captureOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.captureContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(145deg, var(--bg-light), var(--bg-dark));
+    padding: 3rem 2rem;
+    border-radius: 24px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        inset 1px 1px 2px var(--light),
+        inset -1px -1px 2px var(--dark);
+    animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    @media (max-width: 480px) {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+    }
+}
+
+.pokeballContainer {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.pokeballContent {
+    padding: 4px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--bg-dark), var(--bg-light));
+
+    box-shadow:
+        inset 2px 2px (2px * 2) var(--dark),
+        inset (-2px) (-2px) (2px * 2) var(--dark);
+}
+
+.captureTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 2rem 0;
+    color: var(--text-primary);
+
+    @media (max-width: 480px) {
+        font-size: 1.5rem;
+    }
+}
+
+.capturePokemon {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 2rem;
+    position: relative;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+    animation: floatPokemon 2s ease-in-out infinite;
+
+    &.flyingToHeader {
+        animation: flyToHeader 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    }
+
+    @media (max-width: 480px) {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+.capturedSticker {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.captureName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    text-transform: capitalize;
+}
+
+.captureDebut {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 2rem 0;
+}
+
+.captureButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    @include neu.neu-button();
+    padding: 1rem 3rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: linear-gradient(145deg, var(--bg-light), var(--bg-dark));
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+
+    &:hover {
+        @include neu.neu-button-hover();
+    }
+
+    &:active {
+        @include neu.neu-button-active();
+    }
+}
+
+// Animaciones
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes sparkleStars {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes twinkleStar {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: rotate(180deg);
+    }
+}
+
+@keyframes floatPokemon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes flyToHeader {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-80vh) translateX(40vw) scale(0.3);
+        opacity: 0;
+    }
+}
+
+.captureModal.animating {
+    .captureContent {
+        animation: fadeOut 1s ease forwards;
+        animation-delay: 0.5s;
+    }
+
+    .captureOverlay {
+        animation: fadeOut 1s ease forwards;
+        animation-delay: 1s;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
