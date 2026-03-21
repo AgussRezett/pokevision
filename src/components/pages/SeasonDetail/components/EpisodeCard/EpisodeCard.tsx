@@ -2,7 +2,16 @@ import { Link } from 'react-router-dom';
 import styles from './EpisodeCard.module.scss';
 import { getSeasonColor, type PokemonSticker } from '@/utils/pokemonSeasons';
 import type { Episode } from '@/types/episode';
-import { BookOpenTextIcon, CheckIcon, CircleIcon, LockKeyIcon, PlayIcon, ProhibitIcon, RepeatIcon, StarIcon } from '@phosphor-icons/react';
+import {
+  BookOpenTextIcon,
+  CheckIcon,
+  CircleIcon,
+  LockKeyIcon,
+  PlayIcon,
+  ProhibitIcon,
+  RepeatIcon,
+  StarIcon,
+} from '@phosphor-icons/react';
 import { useSounds } from '@/hooks/useSounds';
 
 interface EpisodeCardProps {
@@ -28,10 +37,7 @@ export default function EpisodeCard({
       key={episode.code}
       className={`${styles.episodeCard} ${watched ? styles.watched : ''} ${debutPokemon ? styles.hasDebut : ''}`}
     >
-      <div
-        className={styles.episodeNumber}
-        style={{ background: seasonColor }}
-      >
+      <div className={styles.episodeNumber} style={{ background: seasonColor }}>
         {episode.absoluteEpisode}
       </div>
 
@@ -64,8 +70,7 @@ export default function EpisodeCard({
           >
             {episode.isCanon ? (
               <>
-                <BookOpenTextIcon size={14} weight="fill" />{' '}
-                Historia
+                <BookOpenTextIcon size={14} weight="fill" /> Historia
               </>
             ) : (
               <>
@@ -75,17 +80,13 @@ export default function EpisodeCard({
           </span>
 
           {episode.isCensored && (
-            <span
-              className={`${styles.badge} ${styles.badgeCensored}`}
-            >
+            <span className={`${styles.badge} ${styles.badgeCensored}`}>
               <ProhibitIcon size={14} weight="fill" /> Censurado
             </span>
           )}
 
           {debutPokemon && (
-            <span
-              className={`${styles.badge} ${styles.badgeDebut}`}
-            >
+            <span className={`${styles.badge} ${styles.badgeDebut}`}>
               <StarIcon size={14} weight="fill" /> Debut
             </span>
           )}
@@ -104,9 +105,7 @@ export default function EpisodeCard({
         <button
           onClick={(e) => onToggleWatched(episode.code, e)}
           className={`${styles.watchButton} ${watched ? styles.watched : ''}`}
-          title={
-            watched ? 'Marcar como no visto' : 'Marcar como visto'
-          }
+          title={watched ? 'Marcar como no visto' : 'Marcar como visto'}
         >
           {watched ? (
             <CheckIcon size={24} weight="bold" />

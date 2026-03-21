@@ -10,10 +10,16 @@ import {
 import PageTransition from '@/components/pages/PageTransition/PageTransition';
 import { useSounds } from '@/hooks/useSounds';
 import { LockKeyIcon, StarIcon } from '@phosphor-icons/react';
+import { useGuideHelper } from '@/hooks/useGuideHelper';
+import { seasonSelectorTutorial } from '@/components/GuideHelper/tutorials/seasonSelectorTutorial';
+import GuideHelper from '@/components/GuideHelper/GuideHelper';
 
 export default function SeasonSelector() {
   const { episodes, loading, error, fetchEpisodes, isWatched } =
     useEpisodeStore();
+  const { shouldShow, markAsCompleted } = useGuideHelper(
+    seasonSelectorTutorial
+  );
   const { play } = useSounds();
 
   useEffect(() => {
@@ -59,6 +65,11 @@ export default function SeasonSelector() {
 
   return (
     <PageTransition>
+      <GuideHelper
+        config={seasonSelectorTutorial}
+        isActive={shouldShow}
+        onComplete={markAsCompleted}
+      />
       <div className={styles.container}>
         <div className={styles.seasonsGrid}>
           {seasons.map((season) => {

@@ -8,9 +8,7 @@ import {
   seasonPokemon,
 } from '@/utils/pokemonSeasons';
 import PageTransition from '@/components/pages/PageTransition/PageTransition';
-import {
-  XIcon
-} from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 import { useSounds } from '@/hooks/useSounds';
 import SeasonHeader from '@/components/pages/SeasonDetail/components/SeasonHeader/SeasonHeader';
 import EpisodeFilters from '@/components/pages/SeasonDetail/components/EpisodeFilters/EpisodeFilters';
@@ -70,7 +68,6 @@ export default function SeasonDetail() {
       </div>
     );
   }
-
 
   const pokemons = seasonPokemon[season] || [];
 

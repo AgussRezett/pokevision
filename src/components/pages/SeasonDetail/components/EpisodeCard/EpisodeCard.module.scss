@@ -1,6 +1,5 @@
 @use '../../../../../styles/abstracts/neumorphism' as neu;
 
-
 .episodeCard {
   padding: 1.25rem;
   border-radius: 18px;
@@ -152,7 +151,7 @@
   }
 }
 
-.episodeCard.watched .watchContainer>.watchLink {
+.episodeCard.watched .watchContainer > .watchLink {
   @include neu.neu-card();
   color: var(--text-primary);
 
@@ -175,9 +174,11 @@
   white-space: nowrap;
 
   @include neu.neu-card();
-  background: linear-gradient(360deg,
-      var(--color-primary),
-      var(--color-secondary));
+  background: linear-gradient(
+    360deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   color: #2c3e50;
 
   &:hover {
@@ -185,9 +186,11 @@
   }
 
   &:active {
-    background: linear-gradient(145deg,
-        var(--color-primary),
-        var(--color-secondary));
+    background: linear-gradient(
+      145deg,
+      var(--color-primary),
+      var(--color-secondary)
+    );
     box-shadow:
       inset 6px 6px (6px * 2) var(--dark),
       inset (-6px) (-6px) (6px * 2) var(--light);
@@ -198,7 +201,6 @@
     font-size: 0.875rem;
   }
 }
-
 
 .debutPokemon {
   position: relative;
@@ -249,7 +251,6 @@
 }
 
 @keyframes shimmerBadge {
-
   0%,
   100% {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
