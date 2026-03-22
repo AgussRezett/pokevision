@@ -66,6 +66,7 @@ export default function DialogBox({
                 intervalRef.current = null;
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [message, typingSpeed]); // onTextComplete NO está en las dependencias
 
     const handleClick = () => {

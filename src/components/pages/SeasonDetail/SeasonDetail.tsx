@@ -10,17 +10,21 @@ import {
 import PageTransition from '@/components/pages/PageTransition/PageTransition';
 import { XIcon } from '@phosphor-icons/react';
 import { useSounds } from '@/hooks/useSounds';
+import { useGuideHelper } from '@/hooks/useGuideHelper';
+import GuideHelper from '@/components/GuideHelper/GuideHelper';
 import SeasonHeader from '@/components/pages/SeasonDetail/components/SeasonHeader/SeasonHeader';
 import EpisodeFilters from '@/components/pages/SeasonDetail/components/EpisodeFilters/EpisodeFilters';
 import CaptureModal from '@/components/pages/SeasonDetail/components/CaptureModal/CaptureModal';
 import type { CapturedPokemon } from '@/types/episode';
 import EpisodeCard from '@/components/pages/SeasonDetail/components/EpisodeCard/EpisodeCard';
+import { seasonDetailTutorial } from '@/components/GuideHelper/tutorials/seasonDetailTutorial';
 
 export default function SeasonDetail() {
   const { seasonNumber } = useParams<{ seasonNumber: string }>();
   const { episodes, loading, fetchEpisodes, isWatched, toggleWatched } =
     useEpisodeStore();
   const { play } = useSounds();
+  const { shouldShow, markAsCompleted } = useGuideHelper(seasonDetailTutorial);
 
   const [filterWatched, setFilterWatched] = useState<
     ('watched' | 'unwatched')[]
@@ -124,17 +128,14 @@ export default function SeasonDetail() {
 
     const wasWatched = isWatched(code);
 
-    // Solo mostrar captura si estamos MARCANDO como visto (no desmarcando)
     if (!wasWatched) {
       play('claim');
-      // Verificar si este episodio es debut de algún Pokémon
       const debutPokemon = pokemons.find(
         (p) => p.debutEpisode === episode.absoluteEpisode
       );
 
       if (debutPokemon) {
         play('start');
-        // Mostrar modal de captura
         setCapturedPokemon({
           name: debutPokemon.name,
           img: debutPokemon.img,
@@ -152,7 +153,6 @@ export default function SeasonDetail() {
     play('unlock');
     setShowCaptureAnimation(true);
 
-    // Después de la animación, cerrar el modal
     setTimeout(() => {
       setShowCaptureAnimation(false);
       setCapturedPokemon(null);
@@ -161,6 +161,12 @@ export default function SeasonDetail() {
 
   return (
     <PageTransition>
+      <GuideHelper
+        config={seasonDetailTutorial}
+        isActive={shouldShow}
+        onComplete={markAsCompleted}
+      />
+
       <div className={styles.container}>
         <div className={styles.backNav}>
           <Link to="/" className={styles.backLink} onClick={() => play('back')}>
@@ -209,6 +215,7 @@ export default function SeasonDetail() {
 
                 return (
                   <EpisodeCard
+                    key={episode.code}
                     episode={episode}
                     seasonNumber={season}
                     watched={watched}
@@ -220,7 +227,6 @@ export default function SeasonDetail() {
           )}
         </div>
 
-        {/* Modal de captura de Pokémon */}
         {capturedPokemon && (
           <CaptureModal
             showCaptureAnimation={showCaptureAnimation}
