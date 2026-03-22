@@ -15,12 +15,16 @@ import {
   SkipForwardIcon,
 } from '@phosphor-icons/react';
 import { useSounds } from '@/hooks/useSounds';
+import GuideHelper from '@/components/GuideHelper/GuideHelper';
+import { useGuideHelper } from '@/hooks/useGuideHelper';
+import { episodePlayerTutorial } from '@/components/GuideHelper/tutorials/episodePlayerTutorial';
 
 export default function EpisodePlayer() {
   const { seasonNumber, episodeNumber } = useParams<{
     seasonNumber: string;
     episodeNumber: string;
   }>();
+  const { shouldShow, markAsCompleted } = useGuideHelper(episodePlayerTutorial);
   const navigate = useNavigate();
   const {
     episodes,
@@ -155,6 +159,11 @@ export default function EpisodePlayer() {
 
   return (
     <div className={styles.fullscreenPlayer}>
+      <GuideHelper
+        config={episodePlayerTutorial}
+        isActive={shouldShow}
+        onComplete={markAsCompleted}
+      />
       {/* Controles superiores */}
       <div
         className={`${styles.topControls} ${showControls ? styles.visible : ''}`}
