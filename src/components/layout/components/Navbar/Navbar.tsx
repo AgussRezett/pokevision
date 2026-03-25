@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import ThemeToggleButton from '@/components/ThemeToggleButton/ThemeToggleButton';
 import styles from './Navbar.module.scss';
-import Logo from 'public/Pokevision.svg';
+import Logo from '@assets/logo.svg';
 import { useSounds } from '@/hooks/useSounds';
 
 export default function Navbar() {

@@ -10,7 +10,7 @@
   border-bottom: 1px solid var(--border-color);
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 }
 
@@ -39,11 +39,11 @@
     gap: 0.75rem;
   }
 
-  &:hover > .logo {
+  &:hover>.logo {
     scale: 1.1;
   }
 
-  &:active > .logo {
+  &:active>.logo {
     scale: 0.9;
   }
 }
