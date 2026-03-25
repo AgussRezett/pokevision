@@ -27,7 +27,7 @@ export const seasonDetailTutorial: TutorialConfig = {
       character: 'professor',
       characterName: 'Ordenador',
       message:
-        'Aquí verás el header con los Pokémon de la temporada. Los que están oscuros son los que aún no has desbloqueado.',
+        'Aquí verás el nombre con los Pokémon de la temporada. Los que están oscuros son los que aún no has desbloqueado.',
       highlightElement: `.${seasonHeaderStyles.seasonHeader}`,
     },
     {
@@ -62,7 +62,7 @@ export const seasonDetailTutorial: TutorialConfig = {
       character: 'professor',
       characterName: 'Ordenador',
       message:
-        'Cada card de episodio muestra su información. Si tiene una estrella dorada, ¡significa que un Pokémon debuta ahí!',
+        'Cada tarjeta de episodio muestra su información. Si tiene una estrella dorada, ¡significa que un Pokémon debuta ahí!',
       highlightElement: `.${episodeCardStyles.episodeCard}`,
     },
     {

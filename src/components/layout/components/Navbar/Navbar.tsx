@@ -1,18 +1,22 @@
 import { Link } from 'react-router-dom';
 import ThemeToggleButton from '@/components/ThemeToggleButton/ThemeToggleButton';
 import styles from './Navbar.module.scss';
+import Logo from 'public/Pokevision.svg';
+import { useSounds } from '@/hooks/useSounds';
 
 export default function Navbar() {
+  const { play } = useSounds();
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navContent}>
-        <Link to="/" className={styles.brand}>
+        <Link to="/" className={styles.brand} onClick={() => play('start')}>
           <div className={styles.logo}>
-            <span className={styles.pokeball}>⚪</span>
+            <img src={Logo} className={styles.image} />
           </div>
           <div className={styles.brandText}>
-            <h1>Pokémon Tracker</h1>
-            <p>Tu aventura gamificada</p>
+            <h1>Pokevision</h1>
+            <p>Exclusivamente Pokémon</p>
           </div>
         </Link>
 

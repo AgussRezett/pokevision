@@ -19,10 +19,14 @@
   text-decoration: none;
   color: var(--text-primary);
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 150ms ease;
 
   &:hover {
-    @include neu.neu-pressed();
+    transform: scale(1.05);
+  }
+
+  &:active {
+    @include neu.neu-inset(12px, 6px);
   }
 }
 

@@ -1,3 +1,5 @@
+@use '../../../../styles/abstracts/neumorphism' as neu;
+
 .navbar {
   padding: 1rem 2rem;
   position: sticky;
@@ -24,37 +26,57 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.875rem;
   text-decoration: none;
   color: var(--text-primary);
-  transition: transform 0.2s ease;
+  transition: gap 200ms ease;
 
   &:hover {
-    transform: translateY(-2px);
+    gap: 1rem;
+  }
+
+  &:active {
+    gap: 0.75rem;
+  }
+
+  &:hover > .logo {
+    scale: 1.1;
+  }
+
+  &:active > .logo {
+    scale: 0.9;
   }
 }
 
 .logo {
   width: 50px;
   height: 50px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+  @include neu.neu-card(50%);
+  transition: scale 200ms ease;
+
+  .image {
+    width: auto;
+    height: 75%;
+  }
 }
 
 .brandText {
   h1 {
-    font-size: 1.25rem;
+    font:
+      700 1.2rem 'Conneqt',
+      'sans-serif';
     margin: 0;
     font-weight: 700;
     color: var(--text-primary);
   }
 
   p {
-    font-size: 0.875rem;
+    font:
+      400 0.65rem 'Conneqt',
+      'sans-serif';
     margin: 0;
     color: var(--text-secondary);
     font-weight: 400;
