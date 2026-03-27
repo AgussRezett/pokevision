@@ -18,13 +18,21 @@ import CaptureModal from '@/components/pages/SeasonDetail/components/CaptureModa
 import type { CapturedPokemon } from '@/types/episode';
 import EpisodeCard from '@/components/pages/SeasonDetail/components/EpisodeCard/EpisodeCard';
 import { seasonDetailTutorial } from '@/components/GuideHelper/tutorials/seasonDetailTutorial';
+import { authRequiredTutorial } from '@/components/GuideHelper/tutorials/authRequiredTutorial';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function SeasonDetail() {
   const { seasonNumber } = useParams<{ seasonNumber: string }>();
+  const { user } = useAuth();
   const { episodes, loading, fetchEpisodes, isWatched, toggleWatched } =
     useEpisodeStore();
   const { play } = useSounds();
   const { shouldShow, markAsCompleted } = useGuideHelper(seasonDetailTutorial);
+  const {
+    shouldShow: shouldShowAuthTutorial,
+    markAsCompleted: markAuthTutorialCompleted,
+    showTutorial: showAuthTutorial,
+  } = useGuideHelper(authRequiredTutorial, false);
 
   const [filterWatched, setFilterWatched] = useState<
     ('watched' | 'unwatched')[]
@@ -123,6 +131,13 @@ export default function SeasonDetail() {
     event.preventDefault();
     event.stopPropagation();
 
+    // Si no hay usuario, mostrar tutorial de autenticación
+    if (!user) {
+      play('back');
+      showAuthTutorial();
+      return;
+    }
+
     const episode = episodes.find((ep) => ep.code === code);
     if (!episode) return;
 
@@ -165,6 +180,12 @@ export default function SeasonDetail() {
         config={seasonDetailTutorial}
         isActive={shouldShow}
         onComplete={markAsCompleted}
+      />
+
+      <GuideHelper
+        config={authRequiredTutorial}
+        isActive={shouldShowAuthTutorial}
+        onComplete={markAuthTutorialCompleted}
       />
 
       <div className={styles.container}>

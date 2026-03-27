@@ -18,12 +18,14 @@ import { useSounds } from '@/hooks/useSounds';
 import GuideHelper from '@/components/GuideHelper/GuideHelper';
 import { useGuideHelper } from '@/hooks/useGuideHelper';
 import { episodePlayerTutorial } from '@/components/GuideHelper/tutorials/episodePlayerTutorial';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function EpisodePlayer() {
   const { seasonNumber, episodeNumber } = useParams<{
     seasonNumber: string;
     episodeNumber: string;
   }>();
+  const { user } = useAuth();
   const { shouldShow, markAsCompleted } = useGuideHelper(episodePlayerTutorial);
   const navigate = useNavigate();
   const {
@@ -74,14 +76,14 @@ export default function EpisodePlayer() {
   }, [episode]);
 
   useEffect(() => {
-    if (episode && !watched) {
+    if (episode && !watched && user) {
       const timer = setTimeout(() => {
         markAsWatched(episode.code);
       }, 10000);
 
       return () => clearTimeout(timer);
     }
-  }, [episode, watched, markAsWatched]);
+  }, [episode, watched, markAsWatched, user]);
 
   const seasonEpisodes = episodes.filter((ep) => ep.season === season);
   const currentIndex = episode
@@ -95,7 +97,7 @@ export default function EpisodePlayer() {
       : null;
 
   const handleToggleWatched = () => {
-    if (episode) {
+    if (episode && user) {
       toggleWatched(episode.code);
     }
   };
@@ -179,19 +181,22 @@ export default function EpisodePlayer() {
           </Link>
         </div>
 
-        <div className={styles.topRight}>
-          <button
-            onClick={handleToggleWatched}
-            className={`${styles.watchedButton} ${watched ? styles.active : ''}`}
-            title={watched ? 'Marcar como no visto' : 'Marcar como visto'}
-          >
-            {watched ? (
-              <CheckIcon size={24} weight="bold" />
-            ) : (
-              <CircleIcon size={24} />
-            )}
-          </button>
-        </div>
+        {/* Solo mostrar botón si hay usuario */}
+        {user && (
+          <div className={styles.topRight}>
+            <button
+              onClick={handleToggleWatched}
+              className={`${styles.watchedButton} ${watched ? styles.active : ''}`}
+              title={watched ? 'Marcar como no visto' : 'Marcar como visto'}
+            >
+              {watched ? (
+                <CheckIcon size={24} weight="bold" />
+              ) : (
+                <CircleIcon size={24} />
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Switch neumórfico siempre visible */}
@@ -206,7 +211,7 @@ export default function EpisodePlayer() {
         </div>
       </div>
 
-      {/* Video container - TOTALMENTE LIBRE */}
+      {/* Video container */}
       <div className={styles.videoWrapper}>
         <iframe
           src={embedUrl}

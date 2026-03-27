@@ -5,6 +5,7 @@ import Layout from '@/components/layout/Layout';
 import SeasonSelector from '@/components/pages/SeasonSelector/SeasonSelector';
 import SeasonDetail from '@/components/pages/SeasonDetail/SeasonDetail';
 import EpisodePlayer from '@/components/pages/EpisodePlayer/EpisodePlayer';
+import SyncProvider from '@/contexts/SyncProvider';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -27,11 +28,13 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <AnimatedRoutes />
-      </BrowserRouter>
-    </ThemeProvider>
+    <SyncProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AnimatedRoutes />
+        </BrowserRouter>
+      </ThemeProvider>
+    </SyncProvider>
   );
 }
 

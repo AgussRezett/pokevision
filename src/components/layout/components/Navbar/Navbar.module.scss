@@ -71,6 +71,10 @@
     margin: 0;
     font-weight: 700;
     color: var(--text-primary);
+
+    @media screen and (max-width: 768px) {
+      font-size: 1.1rem;
+    }
   }
 
   p {
@@ -80,6 +84,10 @@
     margin: 0;
     color: var(--text-secondary);
     font-weight: 400;
+
+    @media screen and (max-width: 768px) {
+      font-size: 10px;
+    }
   }
 }
 
@@ -106,6 +114,12 @@
   font-size: 0.9rem;
   transition: all 150ms ease;
   white-space: nowrap;
+
+  .loginButtonLabel {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
 
   &:hover {
     transform: scale(1.03);

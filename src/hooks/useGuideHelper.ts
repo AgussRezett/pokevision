@@ -3,18 +3,23 @@ import { useState, useEffect } from 'react';
 
 export function useGuideHelper(
   config: TutorialConfig,
-  autoStart: boolean = true
+  autoStart: boolean = true,
+  forceShow: boolean = false
 ) {
   const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
+    if (forceShow) {
+      setTimeout(() => setShouldShow(true), 500);
+      return;
+    }
+
     const completed = localStorage.getItem(`tutorial_${config.id}_completed`);
 
     if (completed !== 'true' && autoStart) {
-      // Pequeño delay para que la página cargue
       setTimeout(() => setShouldShow(true), 500);
     }
-  }, [config.id, autoStart]);
+  }, [config.id, autoStart, forceShow]);
 
   const markAsCompleted = () => {
     localStorage.setItem(`tutorial_${config.id}_completed`, 'true');
@@ -26,9 +31,14 @@ export function useGuideHelper(
     setShouldShow(true);
   };
 
+  const showTutorial = () => {
+    setShouldShow(true);
+  };
+
   return {
     shouldShow,
     markAsCompleted,
     resetTutorial,
+    showTutorial,
   };
 }

@@ -7,8 +7,6 @@ import {
   parseEpisodes,
 } from '@/utils/canon';
 
-const WATCHED_EPISODES_KEY = 'pokemon_watched_episodes';
-
 interface Episode {
   code: string;
   season: number;
@@ -31,9 +29,10 @@ interface EpisodeStore {
     season: number,
     episode: number
   ) => Episode | undefined;
+  setWatchedEpisodes: (episodes: Set<string>) => void;
   markAsWatched: (code: string) => void;
-  markAsUnwatched: (code: string) => void; // NUEVO
-  toggleWatched: (code: string) => void; // NUEVO
+  markAsUnwatched: (code: string) => void;
+  toggleWatched: (code: string) => void;
   isWatched: (code: string) => boolean;
   clearCache: () => void;
 }
@@ -119,26 +118,6 @@ const cleanName = (name: string): string => {
   return parsedName.charAt(0).toUpperCase() + parsedName.slice(1).toLowerCase();
 };
 
-const loadWatchedEpisodes = (): Set<string> => {
-  try {
-    const stored = localStorage.getItem(WATCHED_EPISODES_KEY);
-    return stored ? new Set(JSON.parse(stored)) : new Set();
-  } catch {
-    return new Set();
-  }
-};
-
-const saveWatchedEpisodes = (watchedEpisodes: Set<string>) => {
-  try {
-    localStorage.setItem(
-      WATCHED_EPISODES_KEY,
-      JSON.stringify([...watchedEpisodes])
-    );
-  } catch (error) {
-    console.error('Error guardando episodios vistos:', error);
-  }
-};
-
 const assignAbsoluteNumbersAndCanon = (episodes: Episode[]): Episode[] => {
   const canonEpisodes = new Set(parseEpisodes(CANON_EPISODES_STRING));
   const nonCanonEpisodes = new Set(parseEpisodes(NON_CANON_EPISODES_STRING));
@@ -170,7 +149,7 @@ export const useEpisodeStore = create<EpisodeStore>((set, get) => ({
   episodes: [],
   loading: false,
   error: null,
-  watchedEpisodes: loadWatchedEpisodes(),
+  watchedEpisodes: new Set(),
 
   fetchEpisodes: async () => {
     if (get().episodes.length > 0) {
@@ -205,24 +184,24 @@ export const useEpisodeStore = create<EpisodeStore>((set, get) => ({
     );
   },
 
+  setWatchedEpisodes: (episodes: Set<string>) => {
+    set({ watchedEpisodes: episodes });
+  },
+
   markAsWatched: (code: string) => {
     const { watchedEpisodes } = get();
     const newWatched = new Set(watchedEpisodes);
     newWatched.add(code);
-    saveWatchedEpisodes(newWatched);
     set({ watchedEpisodes: newWatched });
   },
 
-  // NUEVO: Desmarcar como visto
   markAsUnwatched: (code: string) => {
     const { watchedEpisodes } = get();
     const newWatched = new Set(watchedEpisodes);
     newWatched.delete(code);
-    saveWatchedEpisodes(newWatched);
     set({ watchedEpisodes: newWatched });
   },
 
-  // NUEVO: Toggle entre visto/no visto
   toggleWatched: (code: string) => {
     const { watchedEpisodes } = get();
     if (watchedEpisodes.has(code)) {

@@ -120,13 +120,14 @@ export default function Navbar() {
             ) : (
               <button
                 className={styles.loginButton}
+                data-login-button
                 onClick={() => {
                   play('select');
                   setShowLoginModal(true);
                 }}
               >
                 <UserCircleIcon size={20} weight="bold" />
-                Iniciar sesión
+                <span className={styles.loginButtonLabel}>Iniciar sesión</span>
               </button>
             )}
           </div>
