@@ -71,37 +71,6 @@ export default function SeasonSelector() {
         onComplete={markAsCompleted}
       />
       <div className={styles.container}>
-        <svg width="0" height="0">
-          <filter id="sticker">
-            <feMorphology
-              in="SourceAlpha"
-              operator="dilate"
-              radius="2.5"
-              result="expanded"
-            />
-            <feGaussianBlur
-              in="expanded"
-              stdDeviation="0.75"
-              result="blurred"
-            />
-            <feComponentTransfer in="blurred" result="rounded">
-              <feFuncA type="discrete" tableValues="0 1" />
-            </feComponentTransfer>
-            <feFlood floodColor="white" result="color" />
-            <feComposite
-              in="color"
-              in2="rounded"
-              operator="in"
-              result="outline"
-            />
-            <feDropShadow dx="4" dy="6" stdDeviation="4" flood-opacity="0.4" />
-            <feMerge>
-              <feMergeNode in="outline" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </svg>
-
         <div className={styles.seasonsGrid}>
           {seasons.map((season) => {
             const seasonEpisodes = episodesBySeason[season];
@@ -167,11 +136,9 @@ export default function SeasonSelector() {
                             }
                           >
                             <img
-                              src={`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${pokemon.pokedex.toString().padStart(3, '0')}.png`}
+                              src={pokemon.img}
                               alt={isUnlocked ? pokemon.name : '???'}
                               className={styles.pokemonSticker}
-                              loading="lazy"
-                              decoding="async"
                             />
                             {!isUnlocked && (
                               <div className={styles.lockIcon}>
