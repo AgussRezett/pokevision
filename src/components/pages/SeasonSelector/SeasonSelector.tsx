@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SeasonSelector.module.scss';
 import { useEpisodeStore } from '@/store/episodeStore';
@@ -21,6 +21,8 @@ export default function SeasonSelector() {
     seasonSelectorTutorial
   );
   const { play } = useSounds();
+  const [visibleSeasons, setVisibleSeasons] = useState<Set<number>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     fetchEpisodes();
@@ -29,6 +31,45 @@ export default function SeasonSelector() {
   useEffect(() => {
     document.title = 'Temporadas de Pokémon | Pokémon Tracker';
   }, []);
+
+  // Intersection Observer para lazy loading
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const seasonNumber = parseInt(
+              entry.target.getAttribute('data-season') || '0',
+              10
+            );
+            setVisibleSeasons((prev) => new Set([...prev, seasonNumber]));
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '100px', // Cargar imágenes 100px antes de que sean visibles
+        threshold: 0.01,
+      }
+    );
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  const seasonCardRef = useCallback(
+    (node: HTMLAnchorElement | null, season: number) => {
+      console.log(season);
+
+      if (node && observerRef.current) {
+        observerRef.current.observe(node);
+      }
+    },
+    []
+  );
 
   const episodesBySeason = episodes.reduce(
     (acc, episode) => {
@@ -83,8 +124,8 @@ export default function SeasonSelector() {
             ).length;
             const progress = Math.round((watchedCount / totalEpisodes) * 100);
             const pokemons = seasonPokemon[season] || [];
+            const isVisible = visibleSeasons.has(season);
 
-            // Obtener el primer y último episodio absoluto de la temporada
             const seasonAbsoluteStart = seasonEpisodes[0]?.absoluteEpisode || 0;
             const seasonAbsoluteEnd =
               seasonEpisodes[seasonEpisodes.length - 1]?.absoluteEpisode || 0;
@@ -102,8 +143,9 @@ export default function SeasonSelector() {
                   } as React.CSSProperties
                 }
                 onClick={() => play('select')}
+                ref={(node) => seasonCardRef(node, season)}
+                data-season={season}
               >
-                {/* Header con color de temporada */}
                 <div
                   className={styles.seasonHeader}
                   style={{ background: getSeasonColor(season) }}
@@ -111,11 +153,10 @@ export default function SeasonSelector() {
                   <h2>Temporada {season}</h2>
                 </div>
 
-                {/* Body con Pokémon */}
                 <div className={styles.seasonBody}>
                   <h3 className={styles.seasonName}>{getSeasonName(season)}</h3>
 
-                  {/* Pokémon Stickers */}
+                  {/* Solo renderizar imágenes si la card es visible */}
                   {pokemons.length > 0 && (
                     <div className={styles.pokemonStickers}>
                       {pokemons.map((pokemon, index) => {
@@ -137,11 +178,17 @@ export default function SeasonSelector() {
                               } as React.CSSProperties
                             }
                           >
-                            <img
-                              src={pokemon.img}
-                              alt={isUnlocked ? pokemon.name : '???'}
-                              className={styles.pokemonSticker}
-                            />
+                            {isVisible ? (
+                              <img
+                                src={pokemon.img}
+                                alt={isUnlocked ? pokemon.name : '???'}
+                                className={styles.pokemonSticker}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            ) : (
+                              <div className={styles.pokemonPlaceholder} />
+                            )}
                             {!isUnlocked && (
                               <div className={styles.lockIcon}>
                                 <LockKeyIcon size={14} weight="fill" />
@@ -153,7 +200,6 @@ export default function SeasonSelector() {
                     </div>
                   )}
 
-                  {/* Progress con marcadores de Pokémon */}
                   <div className={styles.progressSection}>
                     <div className={styles.progressHeader}>
                       <span className={styles.progressLabel}>Progreso</span>
@@ -172,15 +218,12 @@ export default function SeasonSelector() {
                         />
                       </div>
 
-                      {/* Marcadores de desbloqueo de Pokémon */}
                       {pokemons.map((pokemon) => {
-                        // Calcular posición porcentual del debut dentro de la temporada
                         const debutPosition =
                           ((pokemon.debutEpisode - seasonAbsoluteStart) /
                             seasonTotalRange) *
                           100;
 
-                        // Solo mostrar marcadores si el debut está dentro de esta temporada
                         const isInThisSeason =
                           pokemon.debutEpisode >= seasonAbsoluteStart &&
                           pokemon.debutEpisode <= seasonAbsoluteEnd;
@@ -221,7 +264,6 @@ export default function SeasonSelector() {
                     </div>
                   </div>
 
-                  {/* Stats */}
                   <div className={styles.stats}>
                     <div className={styles.stat}>
                       <span className={styles.statLabel}>Episodios</span>
