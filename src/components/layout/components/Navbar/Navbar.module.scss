@@ -39,11 +39,11 @@
     gap: 0.75rem;
   }
 
-  &:hover > .logo {
+  &:hover>.logo {
     scale: 1.1;
   }
 
-  &:active > .logo {
+  &:active>.logo {
     scale: 0.9;
   }
 }
@@ -147,7 +147,36 @@
   position: relative;
 }
 
+.syncIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  @include neu.neu-card(50%);
+  color: var(--text-primary);
+  position: absolute;
+  top: -4px;
+  right: -4px;
+
+}
+
+.syncing {
+  svg {
+    animation: syncSpin 1.5s linear infinite;
+  }
+}
+
+.synced {
+  background: linear-gradient(145deg, #0ce84a, #00be36);
+}
+
+.error {
+  background: linear-gradient(145deg, #e61717, #b20000);
+}
+
 .userButton {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -159,7 +188,6 @@
   color: var(--text-primary);
   cursor: pointer;
   transition: all 150ms ease;
-  overflow: hidden;
   flex-shrink: 0;
 
   &:hover {
@@ -279,5 +307,22 @@
   to {
     opacity: 0;
     transform: translateY(-12px);
+  }
+}
+
+
+
+
+@keyframes syncSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(0.85);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
   }
 }

@@ -4,13 +4,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSounds } from '@/contexts/SoundProvider';
 import styles from './Navbar.module.scss';
 import Logo from '@assets/logo.svg';
-import { SignOutIcon, UserCircleIcon } from '@phosphor-icons/react';
+import { CloudCheckIcon, CloudSlashIcon, SignOutIcon, SpinnerIcon, UserCircleIcon } from '@phosphor-icons/react';
 import LoginModal from '@/components/layout/components/Navbar/components/LoginModal/LoginModal';
 import ThemeToggleButton from '@/components/layout/components/Navbar/components/ThemeToggleButton/ThemeToggleButton';
+import { useWatchedEpisodes } from '@/hooks/useWatchedEpisodes';
 
 export default function Navbar() {
   const { play } = useSounds();
   const { user, signInWithGoogle, signOut } = useAuth();
+  const { syncStatus } = useWatchedEpisodes(user);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -76,6 +78,8 @@ export default function Navbar() {
 
           <div className={styles.navActions}>
             <ThemeToggleButton />
+            {/* Indicador de sincronización */}
+
             {user ? (
               <div className={styles.userMenu} ref={userMenuRef}>
                 <button
@@ -86,6 +90,19 @@ export default function Navbar() {
                     setIsClosing(false);
                   }}
                 >
+                  {user && (
+                    <div className={`${styles.syncIndicator} ${styles[syncStatus]}`}>
+                      {syncStatus === 'syncing' &&
+                        <SpinnerIcon size={14} weight="bold" />
+                      }
+                      {syncStatus === 'synced' &&
+                        <CloudCheckIcon size={12} weight="bold" />
+                      }
+                      {syncStatus === 'error' &&
+                        <CloudSlashIcon size={12} weight="bold" />
+                      }
+                    </div>
+                  )}
                   {user.user_metadata.avatar_url ? (
                     <img
                       src={user.user_metadata.avatar_url}
