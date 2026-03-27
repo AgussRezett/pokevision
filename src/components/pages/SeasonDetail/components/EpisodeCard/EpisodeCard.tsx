@@ -12,7 +12,7 @@ import {
   RepeatIcon,
   StarIcon,
 } from '@phosphor-icons/react';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 
 interface EpisodeCardProps {
   episode: Episode;

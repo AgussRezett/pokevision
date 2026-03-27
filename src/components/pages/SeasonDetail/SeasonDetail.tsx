@@ -9,7 +9,7 @@ import {
 } from '@/utils/pokemonSeasons';
 import PageTransition from '@/components/pages/PageTransition/PageTransition';
 import { XIcon } from '@phosphor-icons/react';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 import { useGuideHelper } from '@/hooks/useGuideHelper';
 import GuideHelper from '@/components/GuideHelper/GuideHelper';
 import SeasonHeader from '@/components/pages/SeasonDetail/components/SeasonHeader/SeasonHeader';

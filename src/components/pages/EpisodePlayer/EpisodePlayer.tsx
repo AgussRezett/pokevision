@@ -14,7 +14,7 @@ import {
   SkipBackIcon,
   SkipForwardIcon,
 } from '@phosphor-icons/react';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 import GuideHelper from '@/components/GuideHelper/GuideHelper';
 import { useGuideHelper } from '@/hooks/useGuideHelper';
 import { episodePlayerTutorial } from '@/components/GuideHelper/tutorials/episodePlayerTutorial';

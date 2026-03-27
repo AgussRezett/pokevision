@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SeasonSelector.module.scss';
 import { useEpisodeStore } from '@/store/episodeStore';
@@ -8,7 +8,7 @@ import {
   seasonPokemon,
 } from '@/utils/pokemonSeasons';
 import PageTransition from '@/components/pages/PageTransition/PageTransition';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 import { LockKeyIcon, StarIcon } from '@phosphor-icons/react';
 import { useGuideHelper } from '@/hooks/useGuideHelper';
 import { seasonSelectorTutorial } from '@/components/GuideHelper/tutorials/seasonSelectorTutorial';
@@ -21,8 +21,6 @@ export default function SeasonSelector() {
     seasonSelectorTutorial
   );
   const { play } = useSounds();
-  const [visibleSeasons, setVisibleSeasons] = useState<Set<number>>(new Set());
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     fetchEpisodes();
@@ -31,45 +29,6 @@ export default function SeasonSelector() {
   useEffect(() => {
     document.title = 'Temporadas de Pokémon | Pokémon Tracker';
   }, []);
-
-  // Intersection Observer para lazy loading
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const seasonNumber = parseInt(
-              entry.target.getAttribute('data-season') || '0',
-              10
-            );
-            setVisibleSeasons((prev) => new Set([...prev, seasonNumber]));
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: '100px', // Cargar imágenes 100px antes de que sean visibles
-        threshold: 0.01,
-      }
-    );
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  const seasonCardRef = useCallback(
-    (node: HTMLAnchorElement | null, season: number) => {
-      console.log(season);
-
-      if (node && observerRef.current) {
-        observerRef.current.observe(node);
-      }
-    },
-    []
-  );
 
   const episodesBySeason = episodes.reduce(
     (acc, episode) => {
@@ -112,6 +71,37 @@ export default function SeasonSelector() {
         onComplete={markAsCompleted}
       />
       <div className={styles.container}>
+        <svg width="0" height="0">
+          <filter id="sticker">
+            <feMorphology
+              in="SourceAlpha"
+              operator="dilate"
+              radius="2.5"
+              result="expanded"
+            />
+            <feGaussianBlur
+              in="expanded"
+              stdDeviation="0.75"
+              result="blurred"
+            />
+            <feComponentTransfer in="blurred" result="rounded">
+              <feFuncA type="discrete" tableValues="0 1" />
+            </feComponentTransfer>
+            <feFlood floodColor="white" result="color" />
+            <feComposite
+              in="color"
+              in2="rounded"
+              operator="in"
+              result="outline"
+            />
+            <feDropShadow dx="4" dy="6" stdDeviation="4" flood-opacity="0.4" />
+            <feMerge>
+              <feMergeNode in="outline" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </svg>
+
         <div className={styles.seasonsGrid}>
           {seasons.map((season) => {
             const seasonEpisodes = episodesBySeason[season];
@@ -124,7 +114,6 @@ export default function SeasonSelector() {
             ).length;
             const progress = Math.round((watchedCount / totalEpisodes) * 100);
             const pokemons = seasonPokemon[season] || [];
-            const isVisible = visibleSeasons.has(season);
 
             const seasonAbsoluteStart = seasonEpisodes[0]?.absoluteEpisode || 0;
             const seasonAbsoluteEnd =
@@ -143,7 +132,6 @@ export default function SeasonSelector() {
                   } as React.CSSProperties
                 }
                 onClick={() => play('select')}
-                ref={(node) => seasonCardRef(node, season)}
                 data-season={season}
               >
                 <div
@@ -178,17 +166,13 @@ export default function SeasonSelector() {
                               } as React.CSSProperties
                             }
                           >
-                            {isVisible ? (
-                              <img
-                                src={pokemon.img}
-                                alt={isUnlocked ? pokemon.name : '???'}
-                                className={styles.pokemonSticker}
-                                loading="lazy"
-                                decoding="async"
-                              />
-                            ) : (
-                              <div className={styles.pokemonPlaceholder} />
-                            )}
+                            <img
+                              src={`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${pokemon.pokedex.toString().padStart(3, '0')}.png`}
+                              alt={isUnlocked ? pokemon.name : '???'}
+                              className={styles.pokemonSticker}
+                              loading="lazy"
+                              decoding="async"
+                            />
                             {!isUnlocked && (
                               <div className={styles.lockIcon}>
                                 <LockKeyIcon size={14} weight="fill" />

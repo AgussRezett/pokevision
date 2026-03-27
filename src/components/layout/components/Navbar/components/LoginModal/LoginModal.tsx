@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './LoginModal.module.scss';
 import { XIcon } from '@phosphor-icons/react';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 import Pokeball from '@/components/pages/SeasonDetail/components/CaptureModal/components/Pokeball/Pokeball';
 
 interface LoginModalProps {

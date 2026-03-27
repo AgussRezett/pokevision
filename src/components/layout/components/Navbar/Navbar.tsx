@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 import styles from './Navbar.module.scss';
 import Logo from '@assets/logo.svg';
 import { SignOutIcon, UserCircleIcon } from '@phosphor-icons/react';

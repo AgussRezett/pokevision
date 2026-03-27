@@ -1,4 +1,10 @@
-import { useRef, useCallback, useEffect } from 'react';
+import {
+  createContext,
+  useContext,
+  useRef,
+  useEffect,
+  type ReactNode,
+} from 'react';
 
 import startSound from '@/assets/sounds/ui/start.mp3';
 import selectSound from '@/assets/sounds/ui/select.mp3';
@@ -27,19 +33,24 @@ const SOUND_PATHS: Record<SoundName, string> = {
   toggle_off: toggleOffSound,
 };
 
-export function useSounds() {
+interface SoundContextValue {
+  play: (soundName: SoundName, volume?: number) => void;
+}
+
+const SoundContext = createContext<SoundContextValue | null>(null);
+
+export function SoundProvider({ children }: { children: ReactNode }) {
   const audioCache = useRef<Map<SoundName, HTMLAudioElement>>(new Map());
 
-  // Precargar sonidos
   useEffect(() => {
+    // Precargar todos los sonidos UNA SOLA VEZ
     Object.entries(SOUND_PATHS).forEach(([name, path]) => {
       const audio = new Audio(path);
       audio.preload = 'auto';
-      audio.volume = 0.7; // Volumen por defecto
+      audio.volume = 0.7;
       audioCache.current.set(name as SoundName, audio);
     });
 
-    // Cleanup
     return () => {
       audioCache.current.forEach((audio) => {
         audio.pause();
@@ -50,21 +61,29 @@ export function useSounds() {
     };
   }, []);
 
-  const play = useCallback((soundName: SoundName, volume?: number) => {
+  const play = (soundName: SoundName, volume?: number) => {
     const audio = audioCache.current.get(soundName);
     if (audio) {
-      // Reiniciar si ya está sonando
       audio.currentTime = 0;
-
       if (volume !== undefined) {
         audio.volume = volume;
       }
-
       audio.play().catch((error) => {
         console.warn(`Error playing sound ${soundName}:`, error);
       });
     }
-  }, []);
+  };
 
-  return { play };
+  return (
+    <SoundContext.Provider value={{ play }}>{children}</SoundContext.Provider>
+  );
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function useSounds() {
+  const context = useContext(SoundContext);
+  if (!context) {
+    throw new Error('useSounds debe usarse dentro de SoundProvider');
+  }
+  return context;
 }

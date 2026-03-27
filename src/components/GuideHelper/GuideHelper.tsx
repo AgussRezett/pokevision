@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import DialogBox from './DialogBox/DialogBox';
 import { type TutorialConfig } from './types';
 import styles from './GuideHelper.module.scss';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 
 interface GuideHelperProps {
   config: TutorialConfig;

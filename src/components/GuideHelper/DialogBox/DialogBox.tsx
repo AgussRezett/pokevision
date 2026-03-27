@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './DialogBox.module.scss';
-import { useSounds } from '@/hooks/useSounds';
+import { useSounds } from '@/contexts/SoundProvider';
 import type { TutorialOption } from '../types';
 
 interface DialogBoxProps {
