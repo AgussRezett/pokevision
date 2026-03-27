@@ -189,8 +189,8 @@
   z-index: 1000;
   animation: slideDown 200ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.15),
-    0 8px 16px rgba(0, 0, 0, 0.08);
+    0 20px 40px rgba(0, 0, 0, 0.35),
+    0 8px 16px rgba(0, 0, 0, 0.25);
 
   display: flex;
   flex-direction: column;
@@ -232,7 +232,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  width: 100%;
   padding: 0.65rem 0.75rem;
   color: var(--text-primary);
   cursor: pointer;
@@ -243,11 +242,11 @@
   @include neu.neu-button();
 
   &:hover {
-    transform: translateX(2px);
+    transform: scale(1.01);
   }
 
   &:active {
-    background: var(--bg-active);
+    @include neu.neu-inset(8px, 2px);
   }
 
   svg {
