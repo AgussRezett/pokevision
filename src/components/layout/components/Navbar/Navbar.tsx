@@ -4,10 +4,17 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSounds } from '@/contexts/SoundProvider';
 import styles from './Navbar.module.scss';
 import Logo from '@assets/logo.svg';
-import { CloudCheckIcon, CloudSlashIcon, SignOutIcon, SpinnerIcon, UserCircleIcon } from '@phosphor-icons/react';
+import {
+  CloudCheckIcon,
+  CloudSlashIcon,
+  SignOutIcon,
+  SpinnerIcon,
+  UserCircleIcon,
+} from '@phosphor-icons/react';
 import LoginModal from '@/components/layout/components/Navbar/components/LoginModal/LoginModal';
 import ThemeToggleButton from '@/components/layout/components/Navbar/components/ThemeToggleButton/ThemeToggleButton';
 import { useWatchedEpisodes } from '@/hooks/useWatchedEpisodes';
+import { APP_VERSION } from '@/config/version';
 
 export default function Navbar() {
   const { play } = useSounds();
@@ -91,16 +98,18 @@ export default function Navbar() {
                   }}
                 >
                   {user && (
-                    <div className={`${styles.syncIndicator} ${styles[syncStatus]}`}>
-                      {syncStatus === 'syncing' &&
+                    <div
+                      className={`${styles.syncIndicator} ${styles[syncStatus]}`}
+                    >
+                      {syncStatus === 'syncing' && (
                         <SpinnerIcon size={14} weight="bold" />
-                      }
-                      {syncStatus === 'synced' &&
+                      )}
+                      {syncStatus === 'synced' && (
                         <CloudCheckIcon size={12} weight="bold" />
-                      }
-                      {syncStatus === 'error' &&
+                      )}
+                      {syncStatus === 'error' && (
                         <CloudSlashIcon size={12} weight="bold" />
-                      }
+                      )}
                     </div>
                   )}
                   {user.user_metadata.avatar_url ? (
@@ -131,6 +140,7 @@ export default function Navbar() {
                       <SignOutIcon size={18} weight="bold" />
                       Cerrar sesión
                     </button>
+                    <div className={styles.versionInfo}>v{APP_VERSION}</div>
                   </div>
                 )}
               </div>

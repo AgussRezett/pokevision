@@ -39,11 +39,11 @@
     gap: 0.75rem;
   }
 
-  &:hover>.logo {
+  &:hover > .logo {
     scale: 1.1;
   }
 
-  &:active>.logo {
+  &:active > .logo {
     scale: 0.9;
   }
 }
@@ -158,7 +158,6 @@
   position: absolute;
   top: -4px;
   right: -4px;
-
 }
 
 .syncing {
@@ -282,6 +281,17 @@
   }
 }
 
+.versionInfo {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  opacity: 0.6;
+}
+
 // ============================================
 // ANIMATIONS
 // ============================================
@@ -309,9 +319,6 @@
     transform: translateY(-12px);
   }
 }
-
-
-
 
 @keyframes syncSpin {
   0% {
