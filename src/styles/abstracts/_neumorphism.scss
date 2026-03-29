@@ -48,8 +48,8 @@
 @mixin neu-button() {
   background: var(--bg-primary);
   box-shadow:
-    6px 6px 12px var(--shadow-dark),
-    -6px -6px 12px var(--shadow-light);
+    3px 3px 6px var(--shadow-dark),
+    -3px -3px 6px var(--shadow-light);
 
   transition:
     box-shadow 150ms ease-in-out,
@@ -60,8 +60,8 @@
 @mixin neu-button-hover() {
   transform: scale(0.95);
   box-shadow:
-    8px 8px 16px var(--shadow-dark-hover),
-    -8px -8px 16px var(--shadow-light-hover);
+    6px 6px 10px var(--shadow-dark-hover),
+    -6px -6px 10px var(--shadow-light-hover);
 }
 
 @mixin neu-button-active() {
