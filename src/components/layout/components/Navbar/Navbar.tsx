@@ -14,7 +14,7 @@ import {
 import LoginModal from '@/components/layout/components/Navbar/components/LoginModal/LoginModal';
 import ThemeToggleButton from '@/components/layout/components/Navbar/components/ThemeToggleButton/ThemeToggleButton';
 import { useWatchedEpisodes } from '@/hooks/useWatchedEpisodes';
-import { APP_VERSION } from '@/config/version';
+import { getVersionInfo } from '@/config/version';
 
 export default function Navbar() {
   const { play } = useSounds();
@@ -140,7 +140,9 @@ export default function Navbar() {
                       <SignOutIcon size={18} weight="bold" />
                       Cerrar sesión
                     </button>
-                    <div className={styles.versionInfo}>v{APP_VERSION}</div>
+                    <div className={styles.versionInfo}>
+                      {getVersionInfo().display}
+                    </div>
                   </div>
                 )}
               </div>
